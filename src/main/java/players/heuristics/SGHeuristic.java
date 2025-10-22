@@ -44,6 +44,7 @@ public class SGHeuristic implements IStateHeuristic {
                 HandCardCounts[card.type.ordinal()] += 1;
             }
         }
+
         System.out.println("HANDCOUNTS: " + java.util.Arrays.toString(HandCardCounts));
 
         System.out.println("Player " + playerId + " - Current played cards: Maki=" + makiCount +
@@ -90,12 +91,14 @@ public class SGHeuristic implements IStateHeuristic {
 
         // 3. Potential points for future scoring opportunities
         double potentialScore = 0.0;
+        int potentialCount = 0;
         // Incomplete Tempura
         if (tempuraCount % 2 == 1) {
             double tempuraInHand = HandCardCounts[SGCard.SGCardType.Tempura.ordinal()];
             // int tempuraScale = Math.min(2, tempuraInHand/state.getNPlayers()); // max 2 tempura can help complete
             double tempuraScale = 2 * ((tempuraInHand/state.getNPlayers()) / 7); // number of tempura per player (normed to 2 because 7 is max possible)
             potentialScore += tempuraScale;  // one tempura waiting for a partner
+            potentialCount++;
         }
 
         System.out.println("Player " + playerId + " - Potential after Tempura: " + potentialScore);
@@ -108,11 +111,13 @@ public class SGHeuristic implements IStateHeuristic {
             // int sashimiScale = Math.min(2, sashimiInHand/state.getNPlayers()); // max 2 sashimi can help complete
             double sashimiScale = 3 * ((sashimiInHand/state.getNPlayers()) / 7); // number of sashimi per player (normed to 2 because 7 is max possible)
             potentialScore += sashimiScale;  // one sashimi (low potential)
+            potentialCount++;
         } else if (sashimiLeftover == 2) {
             double sashimiInHand = HandCardCounts[SGCard.SGCardType.Sashimi.ordinal()];
             // int sashimiScale = Math.min(1, sashimiInHand/state.getNPlayers()); // max 1 sashimi can help complete
             double sashimiScale = 5 * ((sashimiInHand/state.getNPlayers()) / 3.5); // number of sashimi per player (normed to 2 because 7 is max possible)
             potentialScore += sashimiScale;  // two sashimi (close to a set)
+            potentialCount++;
         }
 
         System.out.println("Player " + playerId + " - Potential after Sashimi: " + potentialScore + " (added " + (potentialScore - temp) + ")");
@@ -142,13 +147,10 @@ public class SGHeuristic implements IStateHeuristic {
             // TODO: more accurate estimate of dumplings left
             double dumplingsInHand = HandCardCounts[SGCard.SGCardType.Dumpling.ordinal()];
             // int dumplingScale = Math.min(1, dumplingsInHand/state.getNPlayers()); // max 1 dumpling can help
-            double dumplingScale = (dumplingsInHand/state.getNPlayers()) / 5; // number of dumplings per player (normed to 1 because 5 is max possible)
-            // WTF DO I DO???
-            int picksLeft = state.getPlayerHands().get(playerId).getSize();
-            int numPlayers = state.getNPlayers();
-            // NEED: ensure we have the number of cards left for this player (hand size) for picksLeft
-            double factor = (numPlayers > 0) ? Math.min(1.0, (double)picksLeft / numPlayers) : 1.0; // IS DOUBLE CORRECT?
-            potentialScore += 0.5 * delta * factor;
+            double dumplingScale = (dumplingsInHand/state.getNPlayers()) / 7; // number of dumplings per player (normed to 1 because 7 is max possible)
+
+            potentialScore += (0.5 * delta) * dumplingScale;
+            potentialCount++;
         }
 
         System.out.println("Player " + playerId + " - Potential after Dumplings: " + potentialScore + " (added " + (potentialScore - temp) + ")");
@@ -167,6 +169,7 @@ public class SGHeuristic implements IStateHeuristic {
             double nigiriScale = squidScale + salmonScale + eggScale;
 
             potentialScore += nigiriScale;
+            potentialCount++;
         }
 
         System.out.println("Player " + playerId + " - Potential after Wasabi: " + potentialScore + " (added " + (potentialScore - temp) + ")");
@@ -201,8 +204,10 @@ public class SGHeuristic implements IStateHeuristic {
         } else {
             if (isTopMaki) {
                 potentialScore += 6;
+                potentialCount++;
             } else if (isSecondMaki) {
                 potentialScore += 3;
+                potentialCount++;
             }
         }
 
@@ -220,29 +225,40 @@ public class SGHeuristic implements IStateHeuristic {
         }
         if (puddingCount == maxPudding && puddingCount > 0) {
             potentialScore += 6;  // currently in lead (or tied for lead) in puddings
+            potentialCount++;
         }
         if (puddingCount == minPudding && puddingCount > 0) {
             // Note: if everyone has >0 and this player is lowest, or if player has 0 and others have some
             if (puddingCount < maxPudding) {
                 potentialScore -= 6;  // currently last (or tied for last) in puddings
+                // TODO: do I count this for potentialCount?
             }
         } else if (puddingCount == 0) {
             // If player has none, they are candidate for last place if others have any
             // (Already covered by above if others have >0)
-            // TODO: do I need more here?
         }
         // Chopsticks potential
         if (chopsticksCount > 0) {
             // TODO: THIS LOOKS SUSPICIOUSLY LIKE A MAGIC NUMBER
             // Estimate chopsticks value based on potential combos and average card value
-            double avgCardValue = 2.0;
-            double comboPotentialSoFar = potentialScore;
+            double nigiriValue = HandCardCounts[SGCard.SGCardType.EggNigiri.ordinal()] +
+                    HandCardCounts[SGCard.SGCardType.SalmonNigiri.ordinal()] * 2 +
+                    HandCardCounts[SGCard.SGCardType.SquidNigiri.ordinal()] * 3;
+            double nigiriCount = HandCardCounts[SGCard.SGCardType.EggNigiri.ordinal()] +
+                    HandCardCounts[SGCard.SGCardType.SalmonNigiri.ordinal()] +
+                    HandCardCounts[SGCard.SGCardType.SquidNigiri.ordinal()];
+            double immediateValueInHands = nigiriValue / nigiriCount;
+
+            double comboPotentialSoFar = potentialScore / potentialCount;
             // (We might exclude pudding and maki from comboPotential for this calc, focusing on immediate combos)
             // For simplicity, use current potentialScore as a proxy for combo opportunities
-            double chopValue = (comboPotentialSoFar + avgCardValue) / 2.0;
-            if (chopValue < 2) chopValue = 2;
-            if (chopValue > 6) chopValue = 6;
-            potentialScore += chopValue;
+            if (nigiriCount > 0 && potentialCount > 0) {
+                potentialScore += (nigiriValue + potentialScore) / (nigiriCount + potentialCount);
+            } else if (nigiriCount > 0) {
+                potentialScore += immediateValueInHands;
+            } else if (potentialCount > 0) {
+                potentialScore += comboPotentialSoFar;
+            }
         }
 
         System.out.println("Player " + playerId + " - Potential after Pudding and Chopsticks: " + potentialScore + " (added " + (potentialScore - temp) + ")");
