@@ -4,6 +4,7 @@ import core.AbstractGameState;
 import core.AbstractPlayer;
 import core.actions.AbstractAction;
 import core.actions.DoNothing;
+import players.heuristics.SGHeuristic;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class HumanGUIPlayer extends AbstractPlayer {
     @Override
     public AbstractAction _getAction(AbstractGameState observation, List<AbstractAction> actions) {
         try {
+            System.out.println("Total score: " + new SGHeuristic().evaluateState(observation, this.getPlayerID()));
             return ac.getAction();
         } catch (InterruptedException e) {
             // we have been interrupted - this means the game has been stopped, so we return DoNothing()
