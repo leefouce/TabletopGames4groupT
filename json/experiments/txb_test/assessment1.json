@@ -1,0 +1,12 @@
+{
+  "game" : "SushiGo",
+  "nPlayers" : 2,
+  "mode" : "exhaustive",
+  "matchups" : 10,
+  "verbose" : true,
+  "seed" : 740234,
+  "listener" : "json/listeners/basiclistener.json",
+  "destDir" : "outputdir/txb_output",
+  "playerDirectory" : "json/players/txb_players_conf/assessment1"
+
+}
