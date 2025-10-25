@@ -62,6 +62,7 @@ public class RHEAPlayerT extends AbstractPlayer implements IAnyTimePlayer {
         nonRepairCount = 0;
         RHEAParamsT params = getParameters();
 
+        // don't use MAST
         if (params.useMAST) {
             if (MASTStatistics == null) {
                 MASTStatistics = new ArrayList<>();
@@ -76,13 +77,17 @@ public class RHEAPlayerT extends AbstractPlayer implements IAnyTimePlayer {
             mastPlayer.setMASTStats(MASTStatistics);
         }
         // Initialise individuals
+        // we can use shift model
         if (params.shiftLeft && !population.isEmpty()) {
+            // all individual value = Double.NEGATIVE_INFINITY
             population.forEach(i -> i.value = Double.NEGATIVE_INFINITY);  // so that any we don't have time to shift are ignored when picking an action
             for (RHEAIndividualT genome : population) {
                 if (!budgetLeft(timer)) break;
+                // left-shift one index: same as a[:-1] = a[1:]
                 System.arraycopy(genome.actions, 1, genome.actions, 0, genome.actions.length - 1);
                 // we shift all actions along, and then rollout with repair
                 genome.gameStates[0] = stateObs.copy();
+                // recalculate
                 Pair<Integer, Integer> calls = genome.rollout(getForwardModel(), 0, getPlayerID(), true);
                 fmCalls += calls.a;
                 copyCalls += calls.b;
@@ -91,7 +96,7 @@ public class RHEAPlayerT extends AbstractPlayer implements IAnyTimePlayer {
             population = new ArrayList<>();
             for (int i = 0; i < params.populationSize; ++i) {
                 if (!budgetLeft(timer)) break;
-                // TODO-GT: dont use random gen
+                // TODO-GT: dont use randomPlayer
                 population.add(new RHEAIndividualT(params.horizon, params.discountFactor, getForwardModel(), stateObs,
                         getPlayerID(), rnd, params.heuristic, params.useMAST ? mastPlayer : randomPlayer));
                 fmCalls += population.get(i).length;
@@ -249,12 +254,16 @@ public class RHEAPlayerT extends AbstractPlayer implements IAnyTimePlayer {
         RHEAParamsT params = getParameters();
         List<RHEAIndividualT> newPopulation = new ArrayList<>();
         for (int i = 0, max = Math.min(params.eliteCount, population.size()); i < max; ++i) {
+            // copy every single individual
             newPopulation.add(new RHEAIndividualT(population.get(i)));
         }
         //crossover
         for (int i = 0; i < params.childCount; ++i) {
+            // we only consider the TOURNAMENT
             RHEAIndividualT[] parents = selectParents();
+            // we only consider the UNIFORM
             RHEAIndividualT child = crossover(parents[0], parents[1]);
+            // notice: there is population, not newPopulation
             population.add(child);
         }
 
