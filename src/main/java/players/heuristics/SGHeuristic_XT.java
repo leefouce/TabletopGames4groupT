@@ -39,7 +39,7 @@ import evaluation.optimisation.TunableParameters;
 
 public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic {
 
-    // 比分权重
+    // Score weights
     double WEIGHT_CURRENT_SCORE = 1.0;
     double WEIGHT_COMBO_CARD_SCORE = 1.0;
     double WEIGHT_DUMPLING_CARD_SCORE = 1.0;
@@ -47,14 +47,14 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
     double WEIGHT_MAKI_CARD_SCORE = 1.0;
     double WEIGHT_PUDDING_CARD_SCORE = 1.0;
 
-    // 归一化开关
+    // Normalization switch
     boolean SWITCH_NORMALIZATION = true;
     double NORMALIZE_Z        = 15.0;
     double SCORE_DIFF_NORM    = 10.0;
 
 
-    // 每轮能拿卡的概率
-    double pickRate = 1.0;
+    // Probability of picking a card each round
+    double pickProb = 1.0;
 
     /**
      * Constructor: Initial parameters
@@ -88,7 +88,7 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
 
 
     /**
-     * 整体思路：线性计算比分
+     * Overall idea: compute the score linearly
      * Score = W1*S1 + W2*S2 + W3*S3 + W4*S4 + W5*S5 + W6*S6
      * W = [ WEIGHT_CURRENT_SCORE, WEIGHT_COMBO_CARD_SCORE, WEIGHT_DUMPLING_CARD_SCORE,
      *      WEIGHT_WASABI_CARD_SCORE, WEIGHT_MAKI_CARD_SCORE, WEIGHT_PUDDING_CARD_SCORE ]
@@ -104,7 +104,7 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
         return 0;
     }
 
-    // 所有的evaluate都只考虑增量
+    // All evaluation methods only consider incremental effects
 
     /**
      * CurrScore = (myScore - oppScore) / norm
@@ -119,13 +119,14 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
 
 
     /**
-     * 平衡需要的卡牌数量（need），以及剩下还能选择手牌(myPicksLeft)
-     * formula: score = card_type_score * F(card_type)
+     * Balance between the number of required cards (need)
+     * and the number of remaining picks (myPicksLeft)
+     * Formula: score = card_type_score * F(card_type)
      * Tempura & Sashimi
-     * myPicksLeft/need > =1 => F(card_type)=1
-     * myPicksLeft/need < 1 =>
-     *                          For Tempura: IF need = 2, myPickLeft<2 => F(card_type)=0
-     *                          For Sashimi: IF need = 3, myPickLeft<3 => F(card_type)=0
+     * if myPicksLeft/need >= 1 => F(card_type)=1
+     * if myPicksLeft/need < 1 =>
+     *                          AS Tempura: if need = 2, myPicksLeft < 2 => F(card_type)=0
+     *                          AS Sashimi: if need = 3, myPicksLeft < 3 => F(card_type)=0
      *                          ELSE: F(card_type) = myPicksLeft/need
      *
      * @param gs
@@ -138,14 +139,14 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
 
     /**
      * value(num_dumpling) = [0, 1, 3, 6, 10, 15]
-     * 每增加一张dumpling的价值 inc = [1, 2, 3, 4, 5]
-     * n = 已有饺子
-     * P(a) = 能够拿饺子的概率：min(5 - n, myPicksLeft * pickRate), 超过5张无意义
-     * formula: score = value(n + P(a)整数部分)+ P(a)小数部分 * inc[n + P(a)整数部分]
-     * e.g
+     * The incremental value of each new dumpling = [1, 2, 3, 4, 5]
+     * n = current number of dumplings
+     * P(a) = probability of getting more dumplings: min(5 - n, myPicksLeft * pickRate), max 5 dumplings
+     * Formula: score = value(n + int(P(a))) + fractional(P(a)) * inc[n + int(P(a))]
+     * Example:
      * n = 1, myPicksLeft = 5, pickRate = 0.5
-     * a = min( 5-1, 5*0.5) = 2.5
-     * score = value(1+2) + 0.5 * inc[1+2] = 6 + 0.5*4 = 8
+     * a = min(5 - 1, 5 * 0.5) = 2.5
+     * score = value(1 + 2) + 0.5 * inc[1 + 2] = 6 + 0.5 * 4 = 8
      *
      * @param gs
      * @param playerId
@@ -156,15 +157,16 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
     }
 
     /**
-     * avg(Wasabi * Nigiri) = 1*5 + 2*10 + 3*5 / 5+10+5 = 2
-     * n(Wasabi 已有的量)
-     * t(可以绑定成功的次数) = min(n, myPickLeft) 最多只选择w次
-     * if t==0,t++
-     * formula: score = (3-1) * avg * (t * pickRate)  3-1: 表示增量，因为单独打出Nigiri也有分数
-     * e.g.
-     * n=2, myPickLeft pickRate = 0.5
-     * t=min(2,5)=2
-     * score = (3-1) * avg * (2 * 0.5) = 2*2*1 =4
+     * avg(Wasabi * Nigiri) = 1*5 + 2*10 + 3*5 / (5+10+5) = 2
+     * n = number of Wasabi cards currently held
+     * t = number of possible successful bindings = min(n, myPickLeft)
+     * if t == 0, t++
+     * Formula: score = (3 - 1) * avg * (t * pickRate)
+     * (3 - 1) represents the multiplier gain since Nigiri already has a base score
+     * Example:
+     * n = 2, myPickLeft = 5, pickRate = 0.5
+     * t = min(2, 5) = 2
+     * score = (3 - 1) * avg * (2 * 0.5) = 2 * 2 * 1 = 4
      *
      *
      * @param gs
@@ -176,11 +178,11 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
     }
 
     /**
-     * myM(我的maki数量)
-     * [m1,m2,m3...m5] 对手的maki数量 m1最大 m5最小，
-     * if 1st(myM >= m1 + 1)  score =  6
-     * else if 2nd( m2 + 1<= myM <= m1)  score = 3
-     * else score = 0
+     * myM = my total Maki count
+     * [m1, m2, m3...m5] are opponents' Maki counts in descending order,
+     * if 1st (myM >= m1 + 1)  -> score = 6
+     * else if 2nd (m2 + 1 <= myM <= m1) -> score = 3
+     * else -> score = 0
      * @param gs
      * @param playerId
      * @return
@@ -190,12 +192,17 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
     }
 
     /**
-     * 因为Pudding属于有限资源，所以要考虑每轮的权重 W(rounds) {1:0.5, 2:0.8, 3:1.0}
-     * myP(我的pudding数量)
-     * oppMin(对手最小数量)，oppMax(对手最大数量)
-     * 为了保证不出现heuristic出现负数的情况，最少pudding得分为0，中间为1
-     * players = 2 : Score = W(rounds) * 6 if myP > oppMax else 0
-     *players > 2: Score =  W(rounds) * 6 if myP >  oppMax elif myP < oppMin 0 else 1
+     * Since Pudding is a limited resource, the score must consider the round weight:
+     * W(rounds) = {1:0.5, 2:0.8, 3:1.0}
+     * myP = my pudding count
+     * oppMin = opponent's minimum pudding count
+     * oppMax = opponent's maximum pudding count
+     * To ensure non-negative heuristic scores, the lowest pudding score = 0, middle = 1
+     * For 2 players: Score = W(rounds) * 6 if myP > oppMax else 0
+     * For more than 2 players:
+     *     Score = W(rounds) * 6 if myP > oppMax
+     *             else 0 if myP < oppMin
+     *             else 1
      *
      *
      * @param gs
@@ -207,7 +214,7 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
     }
 
     /**
-     * 保证数据落在[min, max]区间
+     * lamp a value within [min, max]
      * @param value
      * @param min
      * @param max
