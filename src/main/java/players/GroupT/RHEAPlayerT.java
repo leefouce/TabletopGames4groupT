@@ -14,6 +14,7 @@ import utilities.Utils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 public class RHEAPlayerT extends AbstractPlayer implements IAnyTimePlayer {
     private static final AbstractPlayer randomPlayer = new RandomPlayer();
     List<Map<Object, Pair<Integer, Double>>> MASTStatistics; // a list of one Map per player. Action -> (visits, totValue)
@@ -202,16 +203,27 @@ public class RHEAPlayerT extends AbstractPlayer implements IAnyTimePlayer {
 
     RHEAIndividualT[] selectParents() {
         RHEAIndividualT[] parents = new RHEAIndividualT[2];
+        RHEAParamsT params = getParameters();
 
-        switch (getParameters().selectionType) {
+        // Ensure population is sorted
+        population.sort(Comparator.naturalOrder());
+
+        switch (params.selectionType) {
             case TOURNAMENT:
                 parents[0] = tournamentSelection();
                 parents[1] = tournamentSelection();
                 break;
+
             case RANK:
                 parents[0] = rankSelection();
                 parents[1] = rankSelection();
                 break;
+
+            case TRUNCATION_TOURNAMENT:
+                parents[0] = truncationTournamentSelection();
+                parents[1] = truncationTournamentSelection();
+                break;
+
             default:
                 throw new RuntimeException("Unexpected selection type");
         }
@@ -244,6 +256,32 @@ public class RHEAPlayerT extends AbstractPlayer implements IAnyTimePlayer {
                 return population.get(i);
         }
         throw new RuntimeException("Random Generator generated an invalid goal, goal: " + ran + " p: " + p);
+    }
+
+    private RHEAIndividualT truncationTournamentSelection() {
+        RHEAParamsT params = getParameters();
+        int popSize = population.size();
+        int keepCount = (int) Math.ceil(popSize * params.truncationRatio); // e.g., 30%
+        keepCount = Math.max(1, keepCount); // at least 1
+
+        // Ensure we have enough individuals
+        if (keepCount >= popSize) {
+            // Fallback to full tournament
+            System.out.println("ALARM");
+            return tournamentSelection();
+        }
+
+        RHEAIndividualT best = null;
+        for (int i = 0; i < params.tournamentSize; i++) {
+            // Sample uniformly from top keepCount
+            int idx = rnd.nextInt(keepCount);
+            RHEAIndividualT candidate = population.get(idx);
+
+            if (best == null || candidate.value > best.value) {
+                best = candidate;
+            }
+        }
+        return best;
     }
 
     /**

@@ -4,7 +4,8 @@ public class RHEAEnumsT {
     public enum SelectionType
     {
         RANK,
-        TOURNAMENT
+        TOURNAMENT,
+        TRUNCATION_TOURNAMENT
     }
 
     public enum CrossoverType

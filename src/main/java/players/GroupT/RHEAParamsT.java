@@ -22,6 +22,7 @@ public class RHEAParamsT extends PlayerParameters
     public boolean shiftLeft;
     public IStateHeuristic heuristic = AbstractGameState::getGameScore;
     public boolean useMAST;
+    public double truncationRatio = 0.3;
 
 
     public RHEAParamsT() {
@@ -37,6 +38,7 @@ public class RHEAParamsT extends PlayerParameters
         addTunableParameter("mutationCount", 1, Arrays.asList(1, 3, 10));
         addTunableParameter("heuristic", (IStateHeuristic) AbstractGameState::getGameScore);
         addTunableParameter("useMAST", false, Arrays.asList(false, true));
+        addTunableParameter("truncationRatio", 0.3, Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5));
     }
 
     @Override
@@ -54,6 +56,7 @@ public class RHEAParamsT extends PlayerParameters
         mutationCount = (int) getParameterValue("mutationCount");
         useMAST = (boolean) getParameterValue("useMAST");
         heuristic = (IStateHeuristic) getParameterValue("heuristic");
+        truncationRatio = (double) getParameterValue("truncationRatio");
         if (heuristic instanceof TunableParameters<?> tunableHeuristic) {
             for (String name : tunableHeuristic.getParameterNames()) {
                 tunableHeuristic.setParameterValue(name, this.getParameterValue("heuristic." + name));
