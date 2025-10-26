@@ -1,5 +1,5 @@
 {
-  "class" : "players.mcts.MCTSParams",
+  "class" : "players.basicMCTS.BasicMCTSParams",
   "K" : 1.0,
   "rolloutLength" : 100,
   "maxTreeDepth" : 30,

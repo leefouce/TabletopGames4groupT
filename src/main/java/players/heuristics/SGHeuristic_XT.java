@@ -64,7 +64,7 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
 
 
     // Probability of picking a card each round
-    protected double PICKED_PROBABILITY = 1.0;
+    protected double PICKED_PROBABILITY = 0.5;
 
     // for DEBUG
     String DEBUG_PROFILE = "***XTXTXT :  ";
@@ -174,10 +174,10 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
 
         // calculate all score
         double S1 = evaluateCurrentScore(sgState, playerId);
-        double S2 = evaluateComboScore(sgState, playerId, myPickLeft);
+        double S2 = evaluateComboScore(sgState, sgParams, playerId, myPickLeft);
         double S3 = evaluateDumplingScore(sgState, sgParams, playerId, myPickLeft);
         double S4 = evaluateWasabiScore(sgState, sgParams, playerId, myPickLeft);
-        double S5 = evaluateMakiScore(sgState, playerId, myPickLeft);
+        double S5 = evaluateMakiScore(sgState, sgParams, playerId, myPickLeft);
         double S6 = evaluatePuddingScore(sgState, sgParams, playerId);
 
 //        if (sgState.getCoreGameParameters().verbose) {
@@ -187,6 +187,9 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
             System.out.println(DEBUG_PROFILE + "S4 " + S4);
             System.out.println(DEBUG_PROFILE + "S5 " + S5);
             System.out.println(DEBUG_PROFILE + "S6 " + S6);
+
+
+
 //        }
 
         // final score
@@ -220,7 +223,7 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
      */
     public double evaluateCurrentScore(SGGameState state, int playerId) {
 //        System.out.println(DEBUG_PROFILE + "--- evaluateCurrentScore start ---" );
-        double myScore = state.getGameScore(playerId);
+        double myScore = state.getPlayerScore()[playerId].getValue();
         int nPlayers = state.getNPlayers();
         double sum = 0.0;
 
@@ -251,10 +254,11 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
      *
      * @param state
      * @param playerId
+     * @param params
      * @param myPickLeft
      * @return
      */
-    public double evaluateComboScore(SGGameState state, int playerId, int myPickLeft) {
+    public double evaluateComboScore(SGGameState state, SGParameters params, int playerId, int myPickLeft) {
 //        System.out.println(DEBUG_PROFILE + "--- evaluateComboScore start ---" );
 
         double socreT = 0.0;
@@ -264,13 +268,15 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
 
         int nTempura = state.getPlayedCardTypes(SGCard.SGCardType.Tempura, playerId).getValue();
         int needT = (nTempura % 2 == 0) ? 2 : 1;
-        socreT = (myPickLeft >= needT) ? 1.0 : (double) (myPickLeft / needT);
+        double tmpT = (myPickLeft >= needT) ? 1.0 : (double) (myPickLeft / needT);
+        socreT = tmpT * params.valueTempuraPair;
 
         // ----------- Handle Sashimi ------------
         int nSashimi = state.getPlayedCardTypes(SGCard.SGCardType.Sashimi, playerId).getValue();
         int tmp = nSashimi % 3;
         int needS = (tmp == 0) ? 3 : 3 - tmp;
-        socreS = (myPickLeft >= needS) ? 1.0 : (double) (myPickLeft / needS);
+        double tmpS = (myPickLeft >= needS) ? 1.0 : (double) (myPickLeft / needS);
+        socreS = tmpS * params.valueSashimiTriple;
 
 //        System.out.println(DEBUG_PROFILE + "nTempura " + nTempura);
 //        System.out.println(DEBUG_PROFILE + "needT " + needT);
@@ -389,11 +395,12 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
      * else -> score = 0
      *
      * @param state
+     * @param params
      * @param playerId
      * @param myPickLeft
      * @return
      */
-    public double evaluateMakiScore(SGGameState state, int playerId, int myPickLeft) {
+    public double evaluateMakiScore(SGGameState state, SGParameters params,  int playerId, int myPickLeft) {
 
 //        System.out.println(DEBUG_PROFILE + "--- evaluateMakiScore start ---" );
 
@@ -411,10 +418,10 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
         int m2 = allNumMaki[1];
 
         if (myNumMaki >= m1 + 1) {
-            score = 6.0;
+            score = params.valueMakiMost;
         }
         else if (myNumMaki >= m2 + 1 && myNumMaki <= m1 ) {
-            score = 3.0;
+            score = params.valueMakiSecond;
         }
 
 //        System.out.println(DEBUG_PROFILE + "myNumMaki " + myNumMaki);
@@ -456,6 +463,7 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
         double score = 0.0;
         int round = state.getRoundCounter();
         Map<Integer, Double> round2Weight = new HashMap<Integer, Double>(Map.of(
+                0, 0.5, // gameState will return round == 0
                 1, 0.5,
                 2,0.8,
                 3,1.0
@@ -464,28 +472,28 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
         int nPlayers = state.getNPlayers();
         int[] allNumPudding = new int[nPlayers];
         for (int i = 0; i < nPlayers; i++) {
-            allNumPudding[i] = state.getPlayedCardTypes(SGCard.SGCardType.Pudding, playerId).getValue();
+            allNumPudding[i] = state.getPlayedCardTypes(SGCard.SGCardType.Pudding, i).getValue();
         }
         int myNumPudding = allNumPudding[playerId];
         Arrays.sort(allNumPudding);
-        int oppMax = allNumPudding[0];
-        int oppMin = allNumPudding[allNumPudding.length - 1];
+        int allMax = allNumPudding[0];
+        int allMin = allNumPudding[allNumPudding.length - 1];
 
-        double rw = round2Weight.get(round);
+        double rw = (double)round2Weight.get(round);
 
         // case: 2 players
         if(nPlayers == 2){
-            score = myNumPudding > oppMax ? 6.0 * rw : 0;
+            score = myNumPudding == allMax ? 6.0 * rw : 0;
         }
         else if(nPlayers > 2){// case: players > 2
-            if (myNumPudding > oppMax) {
-                score = rw * 6.0;
+            if (myNumPudding == allMin) {
+                score = rw * params.valuePuddingMost;
             }
-            else if (myNumPudding < oppMin) {
-                score = 0.0;
+            else if (myNumPudding == allMin) {
+                score = params.valuePuddingLeast;
             }
             else {
-                score = 1.0;
+                score = 0.0;
             }
         }
         else{
