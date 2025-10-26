@@ -1,0 +1,13 @@
+Game: SushiGo, Players: 2, Mode: EXHAUSTIVE, TotalGames: 100, GamesPerMatchup: 50
+rhea1 got 33,50 points. rhea1 won 33,0% of the 100 games of the tournament. rhea1 won 33,0% of the 100 games it played during the tournament.
+rhea1 got a mean score of 46,35.
+rhea1 won 33,0% of the 100 games against rhea2.
+
+rhea2 got 66,50 points. rhea2 won 66,0% of the 100 games of the tournament. rhea2 won 66,0% of the 100 games it played during the tournament.
+rhea2 got a mean score of 50,23.
+rhea2 won 66,0% of the 100 games against rhea1.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation) 
+rhea2: Win rate 0,67 +/- 0,047	Mean Ordinal 1,33 +/- 0,05
+rhea1: Win rate 0,34 +/- 0,047	Mean Ordinal 1,66 +/- 0,05
+

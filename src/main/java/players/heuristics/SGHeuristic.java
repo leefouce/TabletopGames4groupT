@@ -45,23 +45,14 @@ public class SGHeuristic implements IStateHeuristic {
             }
         }
 
-        System.out.println("HANDCOUNTS: " + java.util.Arrays.toString(HandCardCounts));
+        //System.out.println("HANDCOUNTS: " + java.util.Arrays.toString(HandCardCounts));
 
-        System.out.println("Player " + playerId + " - Current played cards: Maki=" + makiCount +
-                ", Tempura=" + tempuraCount +
-                ", Sashimi=" + sashimiCount +
-                ", Dumpling=" + dumplingCount +
-                ", SquidNigiri=" + squidNigiriCount +
-                ", SalmonNigiri=" + salmonNigiriCount +
-                ", EggNigiri=" + eggNigiriCount +
-                ", Wasabi=" + wasabiCount +
-                ", Chopsticks=" + chopsticksCount +
-                ", Pudding=" + puddingCount);
+        //System.out.println("Player " + playerId + " - Current played cards: Maki=" + makiCount + ", Tempura=" + tempuraCount + ", Sashimi=" + sashimiCount + ", Dumpling=" + dumplingCount + ", SquidNigiri=" + squidNigiriCount + ", SalmonNigiri=" + salmonNigiriCount + ", EggNigiri=" + eggNigiriCount + ", Wasabi=" + wasabiCount + ", Chopsticks=" + chopsticksCount + ", Pudding=" + puddingCount);
 
         // Add flat points from Nigiri
         roundScore += eggNigiriCount + salmonNigiriCount * 2 + squidNigiriCount * 3;
 
-        System.out.println("Player " + playerId + " - Nigiri points: " + roundScore);
+        //System.out.println("Player " + playerId + " - Nigiri points: " + roundScore);
 
         // Add Dumpling points for current dumplingCount
         if (dumplingCount >= 5) {
@@ -79,15 +70,15 @@ public class SGHeuristic implements IStateHeuristic {
             roundScore += dumplingPoints;
         }
 
-        System.out.println("Player " + playerId + " - Dumpling points: " + (roundScore - (eggNigiriCount + salmonNigiriCount * 2 + squidNigiriCount * 3)));
+        //System.out.println("Player " + playerId + " - Dumpling points: " + (roundScore - (eggNigiriCount + salmonNigiriCount * 2 + squidNigiriCount * 3)));
 
         // Add completed Tempura/Sashimi sets
         roundScore += (tempuraCount / 2) * 5; // ignore the error so we do integer division
         roundScore += (sashimiCount / 3) * 10;
         // (Incomplete sets not counted here)
 
-        System.out.println("Player " + playerId + " - Tempura: " + ((tempuraCount / 2) * 5));
-        System.out.println("Player " + playerId + " - Sashimi: " + ((tempuraCount / 3) * 10));
+        //System.out.println("Player " + playerId + " - Tempura: " + ((tempuraCount / 2) * 5));
+        //System.out.println("Player " + playerId + " - Sashimi: " + ((tempuraCount / 3) * 10));
 
         // 3. Potential points for future scoring opportunities
         double potentialScore = 0.0;
@@ -101,7 +92,7 @@ public class SGHeuristic implements IStateHeuristic {
             potentialCount++;
         }
 
-        System.out.println("Player " + playerId + " - Potential after Tempura: " + potentialScore);
+        //System.out.println("Player " + playerId + " - Potential after Tempura: " + potentialScore);
         double temp = potentialScore;
 
         // Incomplete Sashimi
@@ -120,7 +111,7 @@ public class SGHeuristic implements IStateHeuristic {
             potentialCount++;
         }
 
-        System.out.println("Player " + playerId + " - Potential after Sashimi: " + potentialScore + " (added " + (potentialScore - temp) + ")");
+        //System.out.println("Player " + playerId + " - Potential after Sashimi: " + potentialScore + " (added " + (potentialScore - temp) + ")");
         temp = potentialScore;
 
         // Dumpling incremental potential
@@ -153,7 +144,7 @@ public class SGHeuristic implements IStateHeuristic {
             potentialCount++;
         }
 
-        System.out.println("Player " + playerId + " - Potential after Dumplings: " + potentialScore + " (added " + (potentialScore - temp) + ")");
+        //System.out.println("Player " + playerId + " - Potential after Dumplings: " + potentialScore + " (added " + (potentialScore - temp) + ")");
         temp = potentialScore;
 
         // Wasabi potential
@@ -172,7 +163,7 @@ public class SGHeuristic implements IStateHeuristic {
             potentialCount++;
         }
 
-        System.out.println("Player " + playerId + " - Potential after Wasabi: " + potentialScore + " (added " + (potentialScore - temp) + ")");
+        //System.out.println("Player " + playerId + " - Potential after Wasabi: " + potentialScore + " (added " + (potentialScore - temp) + ")");
         temp = potentialScore;
 
         // Maki roll majority potential
@@ -211,7 +202,7 @@ public class SGHeuristic implements IStateHeuristic {
             }
         }
 
-        System.out.println("Player " + playerId + " - Potential after Maki: " + potentialScore + " (added " + (potentialScore - temp) + ")");
+        //System.out.println("Player " + playerId + " - Potential after Maki: " + potentialScore + " (added " + (potentialScore - temp) + ")");
         temp = potentialScore;
 
         // Pudding potential (end game)
@@ -261,7 +252,7 @@ public class SGHeuristic implements IStateHeuristic {
             }
         }
 
-        System.out.println("Player " + playerId + " - Potential after Pudding and Chopsticks: " + potentialScore + " (added " + (potentialScore - temp) + ")");
+        //System.out.println("Player " + playerId + " - Potential after Pudding and Chopsticks: " + potentialScore + " (added " + (potentialScore - temp) + ")");
 
         // TODO: Should I use this?
         // 4. Synergy with cards in hand (immediate next move potential)#
