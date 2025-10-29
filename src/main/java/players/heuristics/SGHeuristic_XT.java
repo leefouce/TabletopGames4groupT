@@ -45,9 +45,9 @@ import java.util.Map;
 public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic {
 
     // Score weights
-    protected double WEIGHT_CURRENT_SCORE = 0.8;
+    protected double WEIGHT_CURRENT_SCORE = 2.0;
     protected double WEIGHT_COMBO_CARD_SCORE = 0.8;
-    protected double WEIGHT_DUMPLING_CARD_SCORE = 0.8;
+    protected double WEIGHT_DUMPLING_CARD_SCORE = 1.2;
     protected double WEIGHT_WASABI_CARD_SCORE = 0.8;
     protected double WEIGHT_MAKI_CARD_SCORE = 0.8;
     protected double WEIGHT_PUDDING_CARD_SCORE = 0.8;
@@ -58,11 +58,11 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
     protected double SCORE_DIFF_NORM    = 1.0;
 
     // card constant
-    protected double NIGIRI_MEAN_SCORE = 2.0;
+    protected double NIGIRI_MEAN_SCORE = 2.5;
 
 
     // Probability of picking a card each round
-    protected double PICKED_PROBABILITY = 0.5;
+    protected double PICKED_PROBABILITY = 0.45;
 
     // for DEBUG
     String DEBUG_PROFILE = "***XTXTXT :  ";

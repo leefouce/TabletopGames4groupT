@@ -12,6 +12,6 @@
   "budget" : 40,
   "breakMS" : 0,
   "heuristic" : {
-    "class" : "players.heuristics.ScoreHeuristic"
+    "class" : "players.heuristics.SGHeuristic_XT"
   }
 }
