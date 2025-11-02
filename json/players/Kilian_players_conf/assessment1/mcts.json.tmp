@@ -1,7 +1,7 @@
 {
 	"class" : "players.mcts.MCTSParams",
 	"K" : 1.0,
-	"rolloutLength" : 10,
+	"rolloutLength" : 100,
 	"maxTreeDepth" : 30,
 	"treePolicy" : "UCB",
 	"opponentTreePolicy" : "OneTree",
@@ -12,6 +12,6 @@
 	"budget" : 40,
 	"breakMS" : 0,
     "heuristic" : {
-      "class" : "players.heuristics.ScoreHeuristic"
+      "class" : "players.heuristics.SGHeuristic_XT"
     }
 }
