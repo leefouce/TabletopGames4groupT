@@ -1,3 +1,5 @@
+------------------------------------------------ 5 players ------------------------------------------------
+
 
 # Xiu's heuristic
 ============= SushiGo - 480 games played =============
@@ -70,3 +72,87 @@ rhea: Win rate 0.37 +/- 0.022	Mean Ordinal 2.22 +/- 0.06
 rheaT2: Win rate 0.11 +/- 0.014	Mean Ordinal 3.08 +/- 0.06
 BasicMCTS: Win rate 0.08 +/- 0.012	Mean Ordinal 3.40 +/- 0.06
 rmhc: Win rate 0.02 +/- 0.006	Mean Ordinal 4.22 +/- 0.05
+
+
+
+#Kilian's Heuristic
+============= SushiGo - 480 games played =============
+BasicMCTS got 29.00 points. BasicMCTS won 5.8% of the 480 games of the tournament. BasicMCTS won 5.8% of the 480 games it played during the tournament.
+BasicMCTS got a mean score of 23.85.
+BasicMCTS won 5.8% of the 480 games against rmhc.
+BasicMCTS won 5.8% of the 480 games against mcts.
+BasicMCTS won 5.8% of the 480 games against rheaT2.
+BasicMCTS won 5.8% of the 480 games against rhea.
+
+rmhc got 6.00 points. rmhc won 1.3% of the 480 games of the tournament. rmhc won 1.3% of the 480 games it played during the tournament.
+rmhc got a mean score of 19.84.
+rmhc won 1.3% of the 480 games against BasicMCTS.
+rmhc won 1.3% of the 480 games against mcts.
+rmhc won 1.3% of the 480 games against rheaT2.
+rmhc won 1.3% of the 480 games against rhea.
+
+mcts got 189.00 points. mcts won 38.1% of the 480 games of the tournament. mcts won 38.1% of the 480 games it played during the tournament.
+mcts got a mean score of 32.48.
+mcts won 38.1% of the 480 games against BasicMCTS.
+mcts won 38.1% of the 480 games against rmhc.
+mcts won 38.1% of the 480 games against rheaT2.
+mcts won 38.1% of the 480 games against rhea.
+
+rheaT2 got 48.00 points. rheaT2 won 9.4% of the 480 games of the tournament. rheaT2 won 9.4% of the 480 games it played during the tournament.
+rheaT2 got a mean score of 26.71.
+rheaT2 won 9.4% of the 480 games against BasicMCTS.
+rheaT2 won 9.4% of the 480 games against rmhc.
+rheaT2 won 9.4% of the 480 games against mcts.
+rheaT2 won 9.4% of the 480 games against rhea.
+
+rhea got 208.00 points. rhea won 42.7% of the 480 games of the tournament. rhea won 42.7% of the 480 games it played during the tournament.
+rhea got a mean score of 32.59.
+rhea won 42.7% of the 480 games against BasicMCTS.
+rhea won 42.7% of the 480 games against rmhc.
+rhea won 42.7% of the 480 games against mcts.
+rhea won 42.7% of the 480 games against rheaT2.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation)
+rhea: Win rate 0.43 +/- 0.022	Mean Ordinal 1.97 +/- 0.05
+mcts: Win rate 0.39 +/- 0.022	Mean Ordinal 2.03 +/- 0.05
+rheaT2: Win rate 0.10 +/- 0.013	Mean Ordinal 3.03 +/- 0.05
+BasicMCTS: Win rate 0.06 +/- 0.011	Mean Ordinal 3.60 +/- 0.05
+rmhc: Win rate 0.01 +/- 0.005	Mean Ordinal 4.29 +/- 0.04
+
+
+
+
+------------------------------------------------ 4 players ------------------------------------------------
+
+
+# xiu's heuristic
+============= SushiGo - 480 games played =============
+BasicMCTS got 40.50 points. BasicMCTS won 8.1% of the 480 games of the tournament. BasicMCTS won 8.1% of the 480 games it played during the tournament.
+BasicMCTS got a mean score of 29.48.
+BasicMCTS won 8.1% of the 480 games against mcts.
+BasicMCTS won 8.1% of the 480 games against rheaT2.
+BasicMCTS won 8.1% of the 480 games against rhea.
+
+mcts got 217.00 points. mcts won 44.8% of the 480 games of the tournament. mcts won 44.8% of the 480 games it played during the tournament.
+mcts got a mean score of 37.69.
+mcts won 44.8% of the 480 games against BasicMCTS.
+mcts won 44.8% of the 480 games against rheaT2.
+mcts won 44.8% of the 480 games against rhea.
+
+rheaT2 got 65.00 points. rheaT2 won 13.3% of the 480 games of the tournament. rheaT2 won 13.3% of the 480 games it played during the tournament.
+rheaT2 got a mean score of 31.75.
+rheaT2 won 13.3% of the 480 games against BasicMCTS.
+rheaT2 won 13.3% of the 480 games against mcts.
+rheaT2 won 13.3% of the 480 games against rhea.
+
+rhea got 157.50 points. rhea won 32.5% of the 480 games of the tournament. rhea won 32.5% of the 480 games it played during the tournament.
+rhea got a mean score of 36.54.
+rhea won 32.5% of the 480 games against BasicMCTS.
+rhea won 32.5% of the 480 games against mcts.
+rhea won 32.5% of the 480 games against rheaT2.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation)
+mcts: Win rate 0.45 +/- 0.023	Mean Ordinal 1.90 +/- 0.04
+rhea: Win rate 0.33 +/- 0.021	Mean Ordinal 2.10 +/- 0.04
+rheaT2: Win rate 0.14 +/- 0.016	Mean Ordinal 2.77 +/- 0.05
+BasicMCTS: Win rate 0.08 +/- 0.013	Mean Ordinal 3.19 +/- 0.05
