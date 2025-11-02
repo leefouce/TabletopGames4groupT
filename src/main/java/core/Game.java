@@ -5,6 +5,7 @@ import core.actions.DoNothing;
 import core.interfaces.IExtendedSequence;
 import core.interfaces.IPrintable;
 import core.turnorders.ReactiveTurnOrder;
+import evaluation.RunGames;
 import evaluation.listeners.IGameListener;
 import evaluation.metrics.Event;
 import evaluation.summarisers.TAGNumericStatSummary;
@@ -695,28 +696,33 @@ public class Game {
      * 5. Mode of running
      * and then run this class.
      */
+//    public static void main(String[] args) {
+//        String gameType = Utils.getArg(args, "game", "Chess");
+//        boolean useGUI = Utils.getArg(args, "gui", true);
+//        int turnPause = Utils.getArg(args, "turnPause", 0);
+//        long seed = Utils.getArg(args, "seed", System.currentTimeMillis());
+//        ActionController ac = new ActionController();
+//
+//        /* Set up players for the game */
+//        ArrayList<AbstractPlayer> players = new ArrayList<>();
+//        players.add(new RandomPlayer());
+//        players.add(new RandomPlayer());
+//    //    players.add(new BasicMCTSPlayer());
+////        players.add(new OSLAPlayer());
+////        players.add(new RMHCPlayer());
+//        // players.add(new HumanGUIPlayer(ac));
+//
+//
+//        /* Game parameter configuration. Set to null to ignore and use default parameters */
+//        String gameParams = null;
+//
+//        /* Run! */
+//        runOne(GameType.valueOf(gameType), gameParams, players, seed, false, null, useGUI ? ac : null, turnPause);
+//    }
+
+    // run with josn config
     public static void main(String[] args) {
-        String gameType = Utils.getArg(args, "game", "Chess");
-        boolean useGUI = Utils.getArg(args, "gui", true);
-        int turnPause = Utils.getArg(args, "turnPause", 0);
-        long seed = Utils.getArg(args, "seed", System.currentTimeMillis());
-        ActionController ac = new ActionController();
-
-        /* Set up players for the game */
-        ArrayList<AbstractPlayer> players = new ArrayList<>();
-        players.add(new RandomPlayer());
-        players.add(new RandomPlayer());
-    //    players.add(new BasicMCTSPlayer());
-//        players.add(new OSLAPlayer());
-//        players.add(new RMHCPlayer());
-        // players.add(new HumanGUIPlayer(ac));
-
-
-        /* Game parameter configuration. Set to null to ignore and use default parameters */
-        String gameParams = null;
-
-        /* Run! */
-        runOne(GameType.valueOf(gameType), gameParams, players, seed, false, null, useGUI ? ac : null, turnPause);
+        RunGames.main(args);
     }
 
 }

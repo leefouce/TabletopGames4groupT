@@ -38,27 +38,29 @@ import games.sushigo.cards.SGCard;
  */
 
 
-public class SGHeuristic_XT extends TunableParameters<Object> implements IStateHeuristic {
+
+
+public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic {
 
     // Score weights
-    public double WEIGHT_CURRENT_SCORE = 1.0;
-    public double WEIGHT_COMBO_CARD_SCORE = 1.0;
-    public double WEIGHT_DUMPLING_CARD_SCORE = 1.0;
-    public double WEIGHT_WASABI_CARD_SCORE = 1.0;
-    public double WEIGHT_MAKI_CARD_SCORE = 1.0;
-    public double WEIGHT_PUDDING_CARD_SCORE = 1.0;
+    protected double WEIGHT_CURRENT_SCORE = 1.0;
+    protected double WEIGHT_COMBO_CARD_SCORE = 1.0;
+    protected double WEIGHT_DUMPLING_CARD_SCORE = 1.0;
+    protected double WEIGHT_WASABI_CARD_SCORE = 1.0;
+    protected double WEIGHT_MAKI_CARD_SCORE = 1.0;
+    protected double WEIGHT_PUDDING_CARD_SCORE = 1.0;
 
     // Normalization switch
-    public boolean SWITCH_NORMALIZATION = true;
-    public double NORMALIZE_Z        = 15.0;
-    public double SCORE_DIFF_NORM    = 10.0;
+    protected boolean SWITCH_NORMALIZATION = true;
+    protected double NORMALIZE_Z        = 15.0;
+    protected double SCORE_DIFF_NORM    = 10.0;
 
     // card constant
-    public double NIGIRI_MEAN_SCORE = 2.0;
+    protected double NIGIRI_MEAN_SCORE = 2.0;
 
 
     // Probability of picking a card each round
-    public double PICKED_PROBABILITY = 1.0;
+    protected double PICKED_PROBABILITY = 1.0;
 
     /**
      * Constructor: Initial parameters
@@ -80,7 +82,7 @@ public class SGHeuristic_XT extends TunableParameters<Object> implements IStateH
 
     // implement Interface(ITunableParameters)
     @Override
-    public AbstractParameters _copy() {
+    protected AbstractParameters _copy() {
         SGHeuristic_XT retValue = new SGHeuristic_XT();
         retValue.WEIGHT_CURRENT_SCORE = WEIGHT_CURRENT_SCORE;
         retValue.WEIGHT_COMBO_CARD_SCORE = WEIGHT_COMBO_CARD_SCORE;
@@ -98,7 +100,7 @@ public class SGHeuristic_XT extends TunableParameters<Object> implements IStateH
     }
 
     @Override
-    public boolean _equals(Object o) {
+    protected boolean _equals(Object o) {
         if (o instanceof SGHeuristic_XT) {
             SGHeuristic_XT other = (SGHeuristic_XT) o;
             return other.WEIGHT_CURRENT_SCORE == WEIGHT_CURRENT_SCORE
@@ -123,36 +125,20 @@ public class SGHeuristic_XT extends TunableParameters<Object> implements IStateH
 
     @Override
     public void _reset() {
-        WEIGHT_CURRENT_SCORE      = getDoubleParam("WEIGHT_CURRENT_SCORE", WEIGHT_CURRENT_SCORE);
-        WEIGHT_COMBO_CARD_SCORE   = getDoubleParam("WEIGHT_COMBO_CARD_SCORE", WEIGHT_COMBO_CARD_SCORE);
-        WEIGHT_DUMPLING_CARD_SCORE= getDoubleParam("WEIGHT_DUMPLING_CARD_SCORE", WEIGHT_DUMPLING_CARD_SCORE);
-        WEIGHT_WASABI_CARD_SCORE  = getDoubleParam("WEIGHT_WASABI_CARD_SCORE", WEIGHT_WASABI_CARD_SCORE);
-        WEIGHT_MAKI_CARD_SCORE    = getDoubleParam("WEIGHT_MAKI_CARD_SCORE", WEIGHT_MAKI_CARD_SCORE);
-        WEIGHT_PUDDING_CARD_SCORE = getDoubleParam("WEIGHT_PUDDING_CARD_SCORE", WEIGHT_PUDDING_CARD_SCORE);
-
-        SWITCH_NORMALIZATION = getBoolParam("SWITCH_NORMALIZATION", SWITCH_NORMALIZATION);
-        NORMALIZE_Z          = getDoubleParam("NORMALIZE_Z", NORMALIZE_Z);
-        SCORE_DIFF_NORM      = getDoubleParam("SCORE_DIFF_NORM", SCORE_DIFF_NORM);
-        NIGIRI_MEAN_SCORE    = getDoubleParam("NIGIRI_MEAN_SCORE", NIGIRI_MEAN_SCORE);
-        PICKED_PROBABILITY   = getDoubleParam("PICKED_PROBABILITY", PICKED_PROBABILITY);
+        WEIGHT_CURRENT_SCORE = (double) getParameterValue("WEIGHT_CURRENT_SCORE");
+        WEIGHT_COMBO_CARD_SCORE = (double) getParameterValue("WEIGHT_COMBO_CARD_SCORE");
+        WEIGHT_DUMPLING_CARD_SCORE = (double) getParameterValue("WEIGHT_DUMPLING_CARD_SCORE");
+        WEIGHT_WASABI_CARD_SCORE = (double) getParameterValue("WEIGHT_WASABI_CARD_SCORE");
+        WEIGHT_MAKI_CARD_SCORE = (double) getParameterValue("WEIGHT_MAKI_CARD_SCORE");
+        WEIGHT_PUDDING_CARD_SCORE = (double) getParameterValue("WEIGHT_PUDDING_CARD_SCORE");
+        SWITCH_NORMALIZATION = (boolean) getParameterValue("SWITCH_NORMALIZATION");
+        NORMALIZE_Z = (double) getParameterValue("NORMALIZE_Z");
+        SCORE_DIFF_NORM = (double) getParameterValue("SCORE_DIFF_NORM");
+        NIGIRI_MEAN_SCORE = (double) getParameterValue("NIGIRI_MEAN_SCORE");
+        PICKED_PROBABILITY = (double) getParameterValue("PICKED_PROBABILITY");
     }
 
-    private double getDoubleParam(String key, double fallback) {
-        Object v = getParameterValue(key);
-        if (v instanceof Number) return ((Number) v).doubleValue();
-        if (v instanceof String) {
-            try { return Double.parseDouble((String) v); } catch (Exception ignore) {}
-        }
-        return fallback;
-    }
 
-    private boolean getBoolParam(String key, boolean fallback) {
-        Object v = getParameterValue(key);
-        if (v instanceof Boolean) return (Boolean) v;
-        if (v instanceof String) return Boolean.parseBoolean((String) v);
-        if (v instanceof Number) return ((Number) v).doubleValue() != 0.0;
-        return fallback;
-    }
 
     /**
      * Overall idea: compute the score linearly
