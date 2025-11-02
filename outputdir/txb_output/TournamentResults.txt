@@ -219,3 +219,55 @@ rhea: Win rate 0.33 +/- 0.021	Mean Ordinal 2.10 +/- 0.04
 rheaT2: Win rate 0.14 +/- 0.016	Mean Ordinal 2.77 +/- 0.05
 BasicMCTS: Win rate 0.08 +/- 0.013	Mean Ordinal 3.19 +/- 0.05
 
+Game: SushiGo, Players: 2, Mode: EXHAUSTIVE, TotalGames: 500, GamesPerMatchup: 250
+rheaT got 251.50 points. rheaT won 49.8% of the 500 games of the tournament. rheaT won 49.8% of the 500 games it played during the tournament.
+rheaT got a mean score of 51.94.
+rheaT won 49.8% of the 500 games against rheaT2.
+
+rheaT2 got 248.50 points. rheaT2 won 49.2% of the 500 games of the tournament. rheaT2 won 49.2% of the 500 games it played during the tournament.
+rheaT2 got a mean score of 51.62.
+rheaT2 won 49.2% of the 500 games against rheaT.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation) 
+rheaT: Win rate 0.50 +/- 0.022	Mean Ordinal 1.49 +/- 0.02
+rheaT2: Win rate 0.50 +/- 0.022	Mean Ordinal 1.50 +/- 0.02
+
+Game: SushiGo, Players: 2, Mode: EXHAUSTIVE, TotalGames: 500, GamesPerMatchup: 250
+rheaT got 1.00 points. rheaT won 0.2% of the 500 games of the tournament. rheaT won 0.2% of the 500 games it played during the tournament.
+rheaT got a mean score of 38.24.
+rheaT won 0.2% of the 500 games against mcts.
+
+mcts got 499.00 points. mcts won 99.8% of the 500 games of the tournament. mcts won 99.8% of the 500 games it played during the tournament.
+mcts got a mean score of 62.18.
+mcts won 99.8% of the 500 games against rheaT.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation) 
+mcts: Win rate 1.00 +/- 0.002	Mean Ordinal 1.00 +/- 0.00
+rheaT: Win rate 0.00 +/- 0.002	Mean Ordinal 2.00 +/- 0.00
+
+Game: SushiGo, Players: 2, Mode: EXHAUSTIVE, TotalGames: 500, GamesPerMatchup: 250
+rheaT got 275.50 points. rheaT won 54.8% of the 500 games of the tournament. rheaT won 54.8% of the 500 games it played during the tournament.
+rheaT got a mean score of 51.01.
+rheaT won 54.8% of the 500 games against mcts.
+
+mcts got 224.50 points. mcts won 44.6% of the 500 games of the tournament. mcts won 44.6% of the 500 games it played during the tournament.
+mcts got a mean score of 48.89.
+mcts won 44.6% of the 500 games against rheaT.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation) 
+rheaT: Win rate 0.55 +/- 0.022	Mean Ordinal 1.45 +/- 0.02
+mcts: Win rate 0.45 +/- 0.022	Mean Ordinal 1.55 +/- 0.02
+
+Game: SushiGo, Players: 2, Mode: EXHAUSTIVE, TotalGames: 500, GamesPerMatchup: 250
+rheaT2 got 140.00 points. rheaT2 won 27.4% of the 500 games of the tournament. rheaT2 won 27.4% of the 500 games it played during the tournament.
+rheaT2 got a mean score of 51.09.
+rheaT2 won 27.4% of the 500 games against rhea.
+
+rhea got 360.00 points. rhea won 71.4% of the 500 games of the tournament. rhea won 71.4% of the 500 games it played during the tournament.
+rhea got a mean score of 57.86.
+rhea won 71.4% of the 500 games against rheaT2.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation) 
+rhea: Win rate 0.72 +/- 0.020	Mean Ordinal 1.27 +/- 0.02
+rheaT2: Win rate 0.28 +/- 0.020	Mean Ordinal 1.71 +/- 0.02
+
