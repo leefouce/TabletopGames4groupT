@@ -1,0 +1,241 @@
+all 0.8 -> 51/100
+WEIGHT_CURRENT_SCORE 1.6 -> 41/100
+WEIGHT_COMBO_CARD_SCORE 1.6 -> 44/100
+WEIGHT_DUMPLING_CARD_SCORE 1.6 -> 49/100
+WEIGHT_WASABI_CARD_SCORE 1.6 -> 41/100
+WEIGHT_MAKI_CARD_SCORE 1.6 -> 31/100
+WEIGHT_WASABI_CARD_SCORE 1.6 -> 39/100
+
+REHA(49.6% of the 500) VS RHEA with ScoreHeuristic (49.4% of the 500)
+
+
+------------------------ Players = 2 ------------------------
+
+	Test: PICKED_PROBABILITY (ALL_W = 0.8 & NMS = 2.0)
+
+         PICKED_PROBABILITY = 1.0  | 32.8% of the 500
+         PICKED_PROBABILITY = 0.6  | 36.4% of the 500
+         PICKED_PROBABILITY = 0.3  | 41.2% of the 500
+         PICKED_PROBABILITY = 0.4  | 42.4% of the 500
+         PICKED_PROBABILITY = 0.5  | 38.2% of the 500
+         PICKED_PROBABILITY = 0.45 | 42.6% of the 500
+
+    Result: PICKED_PROBABILITY = 0.45
+
+
+	Test: NIGIRI_MEAN_SCORE(ALL_W = 0.8 & PP = 0.45)
+         NIGIRI_MEAN_SCORE = 1.5 | 39.4% of the 500
+         NIGIRI_MEAN_SCORE = 2.5 | 44.2% of the 500
+         NIGIRI_MEAN_SCORE = 3.0 | 42.2% of the 500
+         NIGIRI_MEAN_SCORE = 2.3 | 42.6% of the 500
+         NIGIRI_MEAN_SCORE = 2.4 | 39.8% of the 500
+    Result: NIGIRI_MEAN_SCORE = 2.5
+
+    Test: WEIGHT_DUMPLING_CARD_SCORE(Others_W = 0.8 & PP = 0.45 & NMS = 2.5)
+        WEIGHT_DUMPLING_CARD_SCORE = 1.6 | 43.4% of the 500
+        WEIGHT_DUMPLING_CARD_SCORE = 1.2 | 43.6% of the 500
+        WEIGHT_DUMPLING_CARD_SCORE = 2.0 | 38.2% of the 500
+        WEIGHT_DUMPLING_CARD_SCORE = 1.4 | 41.0% of the 500
+        WEIGHT_DUMPLING_CARD_SCORE = 1.3 | 38.6% of the 500
+    Result: WEIGHT_DUMPLING_CARD_SCORE = 1.2
+
+    Test: WEIGHT_PUDDING_CARD_SCORE(Others_W = 0.8 & PP = 0.45 & NMS = 2.5 & W_DU = 1.2) #GOAL: > 43.6%
+        WEIGHT_PUDDING_CARD_SCORE = 1.6 | 40.4% of the 500
+        WEIGHT_PUDDING_CARD_SCORE = 1.2 | 41.0% of the 500
+        WEIGHT_PUDDING_CARD_SCORE = 1.0 | 41.2% of the 500
+        WEIGHT_PUDDING_CARD_SCORE = 0.5 | 33.2% of the 500
+        WEIGHT_PUDDING_CARD_SCORE = 0.9 | 40.6% of the 500
+    Result: WEIGHT_PUDDING_CARD_SCORE = 0.8
+
+
+    Test: WEIGHT_CURRENT_SCORE(Others_W = 0.8 & PP = 0.45 & NMS = 2.5 & W_D = 1.2 & W_P = 0.8) #GOAL: > 43.6%
+        WEIGHT_CURRENT_SCORE = 1.6 | 46.4% of the 500
+        WEIGHT_CURRENT_SCORE = 2.0 | 50.4% of the 500
+        WEIGHT_CURRENT_SCORE = 4.0 | 44.2% of the 500
+        WEIGHT_CURRENT_SCORE = 2.5 | 48.4% of the 500
+        WEIGHT_CURRENT_SCORE = 2.2 | 49.6% of the 500
+        WEIGHT_CURRENT_SCORE = 1.8 | 42.4% of the 500
+        WEIGHT_CURRENT_SCORE = 2.3 | 48.0% of the 500
+        WEIGHT_CURRENT_SCORE = 2.4 | 45.0% of the 500
+
+    Result: WEIGHT_CURRENT_SCORE = 2.0
+
+    Test: WEIGHT_COMBO_CARD_SCORE(Others_W = 0.8 & PP = 0.45 & NMS = 2.5 & W_D = 1.2 & W_P = 0.8 & W_CURR = 2.0) #GOAL: > 50.4%
+            WEIGHT_COMBO_CARD_SCORE = 1.6 | 46.2% of the 500
+            WEIGHT_COMBO_CARD_SCORE = 1.0 | 48.4% of the 500
+            WEIGHT_COMBO_CARD_SCORE = 1.2 | 49.8% of the 500
+            WEIGHT_COMBO_CARD_SCORE = 1.3 | 46.1% of the 500
+            WEIGHT_COMBO_CARD_SCORE = 1.4 | 41.4% of the 500
+    Result: WEIGHT_COMBO_CARD_SCORE = 1.0
+
+    Test: WEIGHT_WASABI_CARD_SCORE(Others_W = 0.8 & PP = 0.45 & NMS = 2.5 & W_D = 1.2 & W_P = 0.8 & W_CURR = 2.0 & W_CC = 1.0) #GOAL: > 50.4%
+                WEIGHT_WASABI_CARD_SCORE = 1.6 | 45.4% of the 500
+                WEIGHT_WASABI_CARD_SCORE = 1.2 | 45.6% of the 500
+                WEIGHT_WASABI_CARD_SCORE = 1.0 | 43.0% of the 500
+    Result: WEIGHT_COMBO_CARD_SCORE = 0.8
+
+    Test: WEIGHT_WASABI_CARD_SCORE(Others_W = 0.8 & PP = 0.45 & NMS = 2.5 & W_D = 1.2 & W_P = 0.8 & W_CURR = 2.0 & W_CC = 1.0 & W_WC = 0.8) #GOAL: > 50.4%
+                    WEIGHT_WASABI_CARD_SCORE = 1.6 | 42.8% of the 500
+                    WEIGHT_WASABI_CARD_SCORE = 1.2 | 47.0% of the 500
+                    WEIGHT_WASABI_CARD_SCORE = 1.0 | 47.6%% of the 500
+    Result: WEIGHT_WASABI_CARD_SCORE = 0.8
+
+
+    FINAL RESULT:
+        WEIGHT_CURRENT_SCORE = 2.0;
+        WEIGHT_COMBO_CARD_SCORE = 0.8;
+        WEIGHT_DUMPLING_CARD_SCORE = 1.2;
+        WEIGHT_WASABI_CARD_SCORE = 0.8;
+        WEIGHT_MAKI_CARD_SCORE = 0.8;
+        WEIGHT_PUDDING_CARD_SCORE = 0.8;
+        NIGIRI_MEAN_SCORE = 2.5;
+        PICKED_PROBABILITY = 0.45;
+
+# VS BasicMCTS
+rheaT: Win rate 0.62 +/- 0.022	Mean Ordinal 1.38 +/- 0.02
+BasicMCTS: Win rate 0.38 +/- 0.022	Mean Ordinal 1.62 +/- 0.02
+
+# VS BasicMCTS VS RHEA
+============= SushiGo - 600 games played =============
+rheaT got 284.50 points. rheaT won 47.0% of the 600 games of the tournament. rheaT won 47.0% of the 600 games it played during the tournament.
+rheaT got a mean score of 44.37.
+rheaT won 47.0% of the 600 games against BasicMCTS.
+rheaT won 47.0% of the 600 games against rhea.
+
+BasicMCTS got 72.50 points. BasicMCTS won 11.7% of the 600 games of the tournament. BasicMCTS won 11.7% of the 600 games it played during the tournament.
+BasicMCTS got a mean score of 36.18.
+BasicMCTS won 11.7% of the 600 games against rheaT.
+BasicMCTS won 11.7% of the 600 games against rhea.
+
+rhea got 243.00 points. rhea won 40.2% of the 600 games of the tournament. rhea won 40.2% of the 600 games it played during the tournament.
+rhea got a mean score of 43.34.
+rhea won 40.2% of the 600 games against rheaT.
+rhea won 40.2% of the 600 games against BasicMCTS.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation)
+rheaT: Win rate 0.47 +/- 0.020	Mean Ordinal 1.66 +/- 0.03
+rhea: Win rate 0.41 +/- 0.020	Mean Ordinal 1.81 +/- 0.03
+BasicMCTS: Win rate 0.12 +/- 0.013	Mean Ordinal 2.51 +/- 0.03
+
+
+
+# VS BasicMCTS VS RHEA VS Random
+============= SushiGo - 792 games played =============
+rheaT got 354.50 points. rheaT won 44.3% of the 792 games of the tournament. rheaT won 44.3% of the 792 games it played during the tournament.
+rheaT got a mean score of 38.73.
+rheaT won 44.3% of the 792 games against BasicMCTS.
+rheaT won 44.3% of the 792 games against random.
+rheaT won 44.3% of the 792 games against rhea.
+
+BasicMCTS got 99.00 points. BasicMCTS won 12.4% of the 792 games of the tournament. BasicMCTS won 12.4% of the 792 games it played during the tournament.
+BasicMCTS got a mean score of 32.24.
+BasicMCTS won 12.4% of the 792 games against rheaT.
+BasicMCTS won 12.4% of the 792 games against random.
+BasicMCTS won 12.4% of the 792 games against rhea.
+
+random got 18.00 points. random won 2.1% of the 792 games of the tournament. random won 2.1% of the 792 games it played during the tournament.
+random got a mean score of 24.94.
+random won 2.1% of the 792 games against rheaT.
+random won 2.1% of the 792 games against BasicMCTS.
+random won 2.1% of the 792 games against rhea.
+
+rhea got 320.50 points. rhea won 40.3% of the 792 games of the tournament. rhea won 40.3% of the 792 games it played during the tournament.
+rhea got a mean score of 38.15.
+rhea won 40.3% of the 792 games against rheaT.
+rhea won 40.3% of the 792 games against BasicMCTS.
+rhea won 40.3% of the 792 games against random.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation)
+rheaT: Win rate 0.45 +/- 0.018	Mean Ordinal 1.78 +/- 0.03
+rhea: Win rate 0.40 +/- 0.017	Mean Ordinal 1.90 +/- 0.03
+BasicMCTS: Win rate 0.13 +/- 0.012	Mean Ordinal 2.71 +/- 0.03
+random: Win rate 0.02 +/- 0.005	Mean Ordinal 3.59 +/- 0.03
+
+# VS BasicMCTS VS RHEA VS Random VS rmhc
+============= SushiGo - 960 games played =============
+rheaT got 432.50 points. rheaT won 44.7% of the 960 games of the tournament. rheaT won 44.7% of the 960 games it played during the tournament.
+rheaT got a mean score of 34.43.
+rheaT won 44.7% of the 960 games against BasicMCTS.
+rheaT won 44.7% of the 960 games against rmhc.
+rheaT won 44.7% of the 960 games against random.
+rheaT won 44.7% of the 960 games against rhea.
+
+BasicMCTS got 58.50 points. BasicMCTS won 5.9% of the 960 games of the tournament. BasicMCTS won 5.9% of the 960 games it played during the tournament.
+BasicMCTS got a mean score of 25.51.
+BasicMCTS won 5.9% of the 960 games against rheaT.
+BasicMCTS won 5.9% of the 960 games against rmhc.
+BasicMCTS won 5.9% of the 960 games against random.
+BasicMCTS won 5.9% of the 960 games against rhea.
+
+rmhc got 18.50 points. rmhc won 1.8% of the 960 games of the tournament. rmhc won 1.8% of the 960 games it played during the tournament.
+rmhc got a mean score of 21.16.
+rmhc won 1.8% of the 960 games against rheaT.
+rmhc won 1.8% of the 960 games against BasicMCTS.
+rmhc won 1.8% of the 960 games against random.
+rmhc won 1.8% of the 960 games against rhea.
+
+random got 15.50 points. random won 1.6% of the 960 games of the tournament. random won 1.6% of the 960 games it played during the tournament.
+random got a mean score of 21.05.
+random won 1.6% of the 960 games against rheaT.
+random won 1.6% of the 960 games against BasicMCTS.
+random won 1.6% of the 960 games against rmhc.
+random won 1.6% of the 960 games against rhea.
+
+rhea got 435.00 points. rhea won 45.1% of the 960 games of the tournament. rhea won 45.1% of the 960 games it played during the tournament.
+rhea got a mean score of 34.31.
+rhea won 45.1% of the 960 games against rheaT.
+rhea won 45.1% of the 960 games against BasicMCTS.
+rhea won 45.1% of the 960 games against rmhc.
+rhea won 45.1% of the 960 games against random.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation)
+rhea: Win rate 0.45 +/- 0.016	Mean Ordinal 1.85 +/- 0.03
+rheaT: Win rate 0.45 +/- 0.016	Mean Ordinal 1.81 +/- 0.03
+BasicMCTS: Win rate 0.06 +/- 0.008	Mean Ordinal 3.26 +/- 0.03
+rmhc: Win rate 0.02 +/- 0.004	Mean Ordinal 3.98 +/- 0.03
+random: Win rate 0.02 +/- 0.004	Mean Ordinal 4.03 +/- 0.03
+
+
+# VS BasicMCTS VS RHEA VS MCTS VS rmhc
+============= SushiGo - 960 games played =============
+rheaT got 298.00 points. rheaT won 30.7% of the 960 games of the tournament. rheaT won 30.7% of the 960 games it played during the tournament.
+rheaT got a mean score of 31.41.
+rheaT won 30.7% of the 960 games against BasicMCTS.
+rheaT won 30.7% of the 960 games against rmhc.
+rheaT won 30.7% of the 960 games against mcts.
+rheaT won 30.7% of the 960 games against rhea.
+
+BasicMCTS got 44.50 points. BasicMCTS won 4.5% of the 960 games of the tournament. BasicMCTS won 4.5% of the 960 games it played during the tournament.
+BasicMCTS got a mean score of 23.32.
+BasicMCTS won 4.5% of the 960 games against rheaT.
+BasicMCTS won 4.5% of the 960 games against rmhc.
+BasicMCTS won 4.5% of the 960 games against mcts.
+BasicMCTS won 4.5% of the 960 games against rhea.
+
+rmhc got 21.00 points. rmhc won 2.2% of the 960 games of the tournament. rmhc won 2.2% of the 960 games it played during the tournament.
+rmhc got a mean score of 19.54.
+rmhc won 2.2% of the 960 games against rheaT.
+rmhc won 2.2% of the 960 games against BasicMCTS.
+rmhc won 2.2% of the 960 games against mcts.
+rmhc won 2.2% of the 960 games against rhea.
+
+mcts got 330.00 points. mcts won 34.0% of the 960 games of the tournament. mcts won 34.0% of the 960 games it played during the tournament.
+mcts got a mean score of 31.88.
+mcts won 34.0% of the 960 games against rheaT.
+mcts won 34.0% of the 960 games against BasicMCTS.
+mcts won 34.0% of the 960 games against rmhc.
+mcts won 34.0% of the 960 games against rhea.
+
+rhea got 266.50 points. rhea won 27.2% of the 960 games of the tournament. rhea won 27.2% of the 960 games it played during the tournament.
+rhea got a mean score of 31.09.
+rhea won 27.2% of the 960 games against rheaT.
+rhea won 27.2% of the 960 games against BasicMCTS.
+rhea won 27.2% of the 960 games against rmhc.
+rhea won 27.2% of the 960 games against mcts.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation)
+mcts: Win rate 0.34 +/- 0.015	Mean Ordinal 2.17 +/- 0.04
+rheaT: Win rate 0.31 +/- 0.015	Mean Ordinal 2.28 +/- 0.04
+rhea: Win rate 0.28 +/- 0.014	Mean Ordinal 2.40 +/- 0.04
+BasicMCTS: Win rate 0.05 +/- 0.007	Mean Ordinal 3.76 +/- 0.04
+rmhc: Win rate 0.02 +/- 0.005	Mean Ordinal 4.33 +/- 0.03

@@ -8,6 +8,10 @@ import games.sushigo.SGGameState;
 import games.sushigo.SGParameters;
 import games.sushigo.cards.SGCard;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /*
  * ----------------------------- CARD RULE -----------------------------------
@@ -38,29 +42,30 @@ import games.sushigo.cards.SGCard;
  */
 
 
-
-
 public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic {
 
     // Score weights
-    protected double WEIGHT_CURRENT_SCORE = 1.0;
-    protected double WEIGHT_COMBO_CARD_SCORE = 1.0;
-    protected double WEIGHT_DUMPLING_CARD_SCORE = 1.0;
-    protected double WEIGHT_WASABI_CARD_SCORE = 1.0;
-    protected double WEIGHT_MAKI_CARD_SCORE = 1.0;
-    protected double WEIGHT_PUDDING_CARD_SCORE = 1.0;
+    protected double WEIGHT_CURRENT_SCORE = 2.0;
+    protected double WEIGHT_COMBO_CARD_SCORE = 0.8;
+    protected double WEIGHT_DUMPLING_CARD_SCORE = 1.2;
+    protected double WEIGHT_WASABI_CARD_SCORE = 0.8;
+    protected double WEIGHT_MAKI_CARD_SCORE = 0.8;
+    protected double WEIGHT_PUDDING_CARD_SCORE = 0.8;
 
     // Normalization switch
-    protected boolean SWITCH_NORMALIZATION = true;
-    protected double NORMALIZE_Z        = 15.0;
-    protected double SCORE_DIFF_NORM    = 10.0;
+    protected boolean SWITCH_NORMALIZATION = false;
+    protected double NORMALIZE_Z        = 1.0;
+    protected double SCORE_DIFF_NORM    = 1.0;
 
     // card constant
-    protected double NIGIRI_MEAN_SCORE = 2.0;
+    protected double NIGIRI_MEAN_SCORE = 2.5;
 
 
     // Probability of picking a card each round
-    protected double PICKED_PROBABILITY = 1.0;
+    protected double PICKED_PROBABILITY = 0.45;
+
+    // for DEBUG
+    String DEBUG_PROFILE = "***XTXTXT :  ";
 
     /**
      * Constructor: Initial parameters
@@ -161,27 +166,37 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
         SGParameters sgParams = (SGParameters) sgState.getGameParameters();
         int myPickLeft = sgState.getPlayerHands().get(playerId).getSize();
 
+//        System.out.println(DEBUG_PROFILE + "Player " + playerId);
+//        System.out.println(DEBUG_PROFILE + "myPickLeft " + myPickLeft);
 
         // calculate all score
         double S1 = evaluateCurrentScore(sgState, playerId);
-        double S2 = evaluateComboScore(sgState, playerId, myPickLeft);
+        double S2 = evaluateComboScore(sgState, sgParams, playerId, myPickLeft);
         double S3 = evaluateDumplingScore(sgState, sgParams, playerId, myPickLeft);
-        double S4 = evaluateWasabiScore(sgState, sgParams, playerId);
-        double S5 = evaluateMakiScore(sgState, sgParams, playerId);
+        double S4 = evaluateWasabiScore(sgState, sgParams, playerId, myPickLeft);
+        double S5 = evaluateMakiScore(sgState, sgParams, playerId, myPickLeft);
         double S6 = evaluatePuddingScore(sgState, sgParams, playerId);
 
+
+//        System.out.println(DEBUG_PROFILE + "S2 " + S2);
+//        System.out.println(DEBUG_PROFILE + "S3 " + S3);
+//        System.out.println(DEBUG_PROFILE + "S4 " + S4);
+//        System.out.println(DEBUG_PROFILE + "S5 " + S5);
+//        System.out.println(DEBUG_PROFILE + "S1 " + S1);
+//        System.out.println(DEBUG_PROFILE + "S6 " + S6);
+
+
         // final score
-        double finalScore = WEIGHT_CURRENT_SCORE * S1
+        double score = WEIGHT_CURRENT_SCORE * S1
                 + WEIGHT_COMBO_CARD_SCORE * S2
                 + WEIGHT_DUMPLING_CARD_SCORE * S3
                 + WEIGHT_WASABI_CARD_SCORE * S4
                 + WEIGHT_MAKI_CARD_SCORE * S5
                 + WEIGHT_PUDDING_CARD_SCORE * S6;
 
-        if(SWITCH_NORMALIZATION)
-            return Math.tanh(finalScore / NORMALIZE_Z);
-        else
-            return  finalScore;
+        double finalScore = SWITCH_NORMALIZATION ? Math.tanh(score / NORMALIZE_Z) : score;
+//        System.out.println(DEBUG_PROFILE + "---FINAL SCORE--- " + finalScore);
+        return finalScore;
 
     }
 
@@ -196,7 +211,9 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
      * @return
      */
     public double evaluateCurrentScore(SGGameState state, int playerId) {
-        double myScore = state.getGameScore(playerId);
+//        System.out.println(DEBUG_PROFILE + "--- evaluateCurrentScore start ---" );
+        double score = 0.0;
+        double myScore = state.getPlayerScore()[playerId].getValue();
         int nPlayers = state.getNPlayers();
         double sum = 0.0;
 
@@ -207,7 +224,13 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
             }
         }
         double oppoAvgScore = sum / (nPlayers - 1);
-        return (myScore - oppoAvgScore) / SCORE_DIFF_NORM;
+        score = myScore - oppoAvgScore;
+
+//        System.out.println(DEBUG_PROFILE + "nPlayers " + nPlayers);
+//        System.out.println(DEBUG_PROFILE + "myScore " + myScore);
+//        System.out.println(DEBUG_PROFILE + "oppoAvgScore " + oppoAvgScore);
+//        System.out.println(DEBUG_PROFILE + "--- evaluateCurrentScore end ---" );
+        return score;
     }
 
 
@@ -221,10 +244,12 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
      *
      * @param state
      * @param playerId
+     * @param params
      * @param myPickLeft
      * @return
      */
-    public double evaluateComboScore(SGGameState state, int playerId, int myPickLeft) {
+    public double evaluateComboScore(SGGameState state, SGParameters params, int playerId, int myPickLeft) {
+//        System.out.println(DEBUG_PROFILE + "--- evaluateComboScore start ---" );
 
         double socreT = 0.0;
         double socreS = 0.0;
@@ -233,14 +258,26 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
 
         int nTempura = state.getPlayedCardTypes(SGCard.SGCardType.Tempura, playerId).getValue();
         int needT = (nTempura % 2 == 0) ? 2 : 1;
-        socreT = (myPickLeft >= needT) ? 1.0 : (double) (myPickLeft / needT);
+        double tmpT = (myPickLeft >= needT) ? 1.0 :  ((double)myPickLeft / (double)needT);
+        socreT = tmpT * params.valueTempuraPair;
 
         // ----------- Handle Sashimi ------------
         int nSashimi = state.getPlayedCardTypes(SGCard.SGCardType.Sashimi, playerId).getValue();
         int tmp = nSashimi % 3;
         int needS = (tmp == 0) ? 3 : 3 - tmp;
-        socreS = (myPickLeft >= needS) ? 1.0 : (double) (myPickLeft / needS);
+        double tmpS = (myPickLeft >= needS) ? 1.0 : ((double)myPickLeft / (double)needS);
+        socreS = tmpS * params.valueSashimiTriple;
 
+//        System.out.println(DEBUG_PROFILE + "nTempura " + nTempura);
+//        System.out.println(DEBUG_PROFILE + "needT " + needT);
+//        System.out.println(DEBUG_PROFILE + "socreT " + socreT);
+//
+//        System.out.println(DEBUG_PROFILE + "nSashimi " + nSashimi);
+//        System.out.println(DEBUG_PROFILE + "needS " + needS);
+//        System.out.println(DEBUG_PROFILE + "socreS " + socreS);
+//
+//
+//        System.out.println(DEBUG_PROFILE + "--- evaluateComboScore end ---" );
         return socreT + socreS;
     }
 
@@ -262,11 +299,14 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
      * @return
      */
     public double evaluateDumplingScore(SGGameState state, SGParameters params, int playerId, int myPickLeft) {
+
+//        System.out.println(DEBUG_PROFILE + "--- evaluateDumplingScore start ---" );
+
         int nDumpling = state.getPlayedCardTypes(SGCard.SGCardType.Dumpling, playerId).getValue();
         // probability of getting more dumplings
         double pDumping = Math.min(params.valueDumpling.length - nDumpling, PICKED_PROBABILITY * myPickLeft);
         // nDumpling over 5 we dont pick anymore
-        if (pDumping < 0)
+        if (pDumping <= 0)
             return 0.0;
         // just hardcode this for now
         int[] inc = new int[] {1, 2, 3, 4, 5};
@@ -284,6 +324,13 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
             int idx = Math.min(4, nDumpling + intP);
             score += fracP * inc[idx];
         }
+
+
+//        System.out.println(DEBUG_PROFILE + "nDumpling " + nDumpling);
+//        System.out.println(DEBUG_PROFILE + "pDumping " + pDumping);
+//        System.out.println(DEBUG_PROFILE + "score " + score);
+//
+//        System.out.println(DEBUG_PROFILE + "--- evaluateDumplingScore end ---" );
         return score;
     }
 
@@ -291,7 +338,7 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
      * avg(Wasabi * Nigiri) = 1*5 + 2*10 + 3*5 / (5+10+5) = 2
      * n = number of Wasabi cards currently held
      * t = number of possible successful bindings = min(n, myPickLeft)
-     * if t == 0, t++
+     * if n == 0, t++,
      * Formula: score = (3 - 1) * avg * (t * pickRate)
      * (3 - 1) represents the multiplier gain since Nigiri already has a base score
      * Example:
@@ -303,10 +350,27 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
      * @param state
      * @param params
      * @param playerId
+     * @param myPickLeft
      * @return
      */
-    public double evaluateWasabiScore(SGGameState state, SGParameters params, int playerId) {
-        return 0;
+    public double evaluateWasabiScore(SGGameState state, SGParameters params, int playerId, int myPickLeft) {
+
+//        System.out.println(DEBUG_PROFILE + "--- evaluateWasabiScore start ---" );
+
+        double score = 0.0;
+        // average score about Wasabi binding Nigiri (hardcode for now)
+        int nWasabi = state.getPlayedCardTypes(SGCard.SGCardType.Wasabi, playerId).getValue();
+        int t = Math.min(nWasabi, myPickLeft);
+
+        score = (params.multiplierWasabi - 1) * NIGIRI_MEAN_SCORE * (t * PICKED_PROBABILITY);
+
+//        System.out.println(DEBUG_PROFILE + "nWasabi " + nWasabi);
+//        System.out.println(DEBUG_PROFILE + "t " + t);
+//        System.out.println(DEBUG_PROFILE + "score " + score);
+//
+//        System.out.println(DEBUG_PROFILE + "--- evaluateWasabiScore end ---" );
+
+        return score;
     }
 
     /**
@@ -319,13 +383,49 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
      * @param state
      * @param params
      * @param playerId
+     * @param myPickLeft
      * @return
      */
-    public double evaluateMakiScore(SGGameState state, SGParameters params, int playerId) {
-        return 0;
+    public double evaluateMakiScore(SGGameState state, SGParameters params,  int playerId, int myPickLeft) {
+
+//        System.out.println(DEBUG_PROFILE + "--- evaluateMakiScore start ---" );
+
+        double score = 0.0;
+        int myNumMaki  = state.getPlayedCardTypes(SGCard.SGCardType.Maki, playerId).getValue();
+        int nPlayers = state.getNPlayers();
+        // check opponents not all player
+        int[] oppNumMaki = new int[nPlayers];
+        for (int i = 0; i < nPlayers; i++) {
+            if (i != playerId)
+                oppNumMaki[i] = (state.getPlayedCardTypes(SGCard.SGCardType.Maki, i).getValue());
+        }
+
+
+        Arrays.sort(oppNumMaki);
+        int m1 = oppNumMaki[oppNumMaki.length - 1];
+        int m2 = oppNumMaki[oppNumMaki.length - 2];
+
+        if (myNumMaki >= m1 + 1) {
+            score = params.valueMakiMost;
+        }
+        else if (myNumMaki >= m2 + 1 && myNumMaki <= m1 ) {
+            score = params.valueMakiSecond;
+        }
+
+//        System.out.println(DEBUG_PROFILE + "myNumMaki " + myNumMaki);
+//        System.out.println(DEBUG_PROFILE + "m1 " + m1);
+//        System.out.println(DEBUG_PROFILE + "m2 " + m2);
+//        System.out.println(DEBUG_PROFILE + "score " + score);
+//
+//        System.out.println(DEBUG_PROFILE + "--- evaluateMakiScore end ---" );
+
+        return  score;
     }
 
     /**
+     *
+     *  Based on Rules
+     *
      * Since Pudding is a limited resource, the score must consider the round weight:
      * W(rounds) = {1:0.5, 2:0.8, 3:1.0}
      * myP = my pudding count
@@ -345,11 +445,62 @@ public class SGHeuristic_XT extends TunableParameters implements IStateHeuristic
      * @return
      */
     public double evaluatePuddingScore(SGGameState state, SGParameters params, int playerId) {
-        return 0;
+
+//        System.out.println(DEBUG_PROFILE + "--- evaluatePuddingScore start ---" );
+
+        double score = 0.0;
+        int round = state.getRoundCounter();
+        Map<Integer, Double> round2Weight = new HashMap<Integer, Double>(Map.of(
+                0, 0.5, // gameState will return round == 0
+                1, 0.5,
+                2,0.8,
+                3,1.0
+        ));
+
+        int nPlayers = state.getNPlayers();
+        int[] allNumPudding = new int[nPlayers];
+        for (int i = 0; i < nPlayers; i++) {
+            allNumPudding[i] = state.getPlayedCardTypes(SGCard.SGCardType.Pudding, i).getValue();
+        }
+        int myNumPudding = allNumPudding[playerId];
+        Arrays.sort(allNumPudding);
+        int allMax = allNumPudding[allNumPudding.length - 1];
+        int allMin = allNumPudding[0];
+
+        double rw = (double)round2Weight.get(round);
+
+        // case: 2 players
+        if(nPlayers == 2){
+            score = myNumPudding == allMax ? 6.0 * rw : 0;
+        }
+        else if(nPlayers > 2){// case: players > 2
+            // myNumPudding is the highest one
+            if (myNumPudding == allMax) {
+                score = rw * params.valuePuddingMost;
+            }
+            // myNumPudding is the lowest one
+            else if (myNumPudding == allMin) {
+                score = params.valuePuddingLeast;
+            }
+            else {
+                score = 0.0;
+            }
+        }
+        else{
+            throw new IllegalArgumentException("nPlayer must over 2, but " + nPlayers);
+        }
+
+//        System.out.println(DEBUG_PROFILE + "myNumPudding " + myNumPudding);
+//        System.out.println(DEBUG_PROFILE + "oppMax " + oppMax);
+//        System.out.println(DEBUG_PROFILE + "oppMin " + oppMin);
+//        System.out.println(DEBUG_PROFILE + "score " + score);
+//
+//        System.out.println(DEBUG_PROFILE + "--- evaluatePuddingScore end ---" );
+        return score;
     }
 
     /**
-     * lamp a value within [min, max]
+     * clamp a value within [min, max]
      * @param value
      * @param min
      * @param max
