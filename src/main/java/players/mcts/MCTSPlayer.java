@@ -274,12 +274,12 @@ public class MCTSPlayer extends AbstractPlayer implements IAnyTimePlayer, IHasSt
 
         SGGameState sgState = (SGGameState) gameState;
         // System.out.println(sgState.getNPlayers()); // player count (if important)
-        System.out.println("Player: " + this.getPlayerID() + " -------------------------------- Round: " + sgState.getPlayerHands().get(0).getSize());
-        System.out.println("Cards played: " + sgState.getPlayedCards()); // This gives the cards played in the ROUND
-        System.out.println("Hands: " + sgState.getPlayerHands()); // This gives the cards in all players' hands at the beginning of each ROUNDturn
-        System.out.println("Cards this round: " + Arrays.toString(sgState.getPlayedCardTypes())); // This gives the cards played in the current ROUND
-        System.out.println("Cards all game: " + Arrays.toString(sgState.getPlayedCardTypesAllGame())); // This gives the cards played in the entire GAME
-        System.out.println("Points all game: " + Arrays.toString(sgState.getPointsPerCardType())); // This gives the points all game (SOME ARE NOT YET CALC IN THAT)
+//        System.out.println("Player: " + this.getPlayerID() + " -------------------------------- Round: " + sgState.getPlayerHands().get(0).getSize());
+//        System.out.println("Cards played: " + sgState.getPlayedCards()); // This gives the cards played in the ROUND
+//        System.out.println("Hands: " + sgState.getPlayerHands()); // This gives the cards in all players' hands at the beginning of each ROUNDturn
+//        System.out.println("Cards this round: " + Arrays.toString(sgState.getPlayedCardTypes())); // This gives the cards played in the current ROUND
+//        System.out.println("Cards all game: " + Arrays.toString(sgState.getPlayedCardTypesAllGame())); // This gives the cards played in the entire GAME
+//        System.out.println("Points all game: " + Arrays.toString(sgState.getPointsPerCardType())); // This gives the points all game (SOME ARE NOT YET CALC IN THAT)
 
         long timeTaken = System.nanoTime() - currentTimeNano;
 
@@ -306,7 +306,7 @@ public class MCTSPlayer extends AbstractPlayer implements IAnyTimePlayer, IHasSt
             throw new AssertionError(String.format("Unexpectedly large number of children: %d with action size of %d", root.children.size(), actions.size()));
         lastAction = new Pair<>(gameState.getCurrentPlayer(), root.bestAction());
 
-        System.out.println("Next Action: " + lastAction.b.copy().toString());
+//        System.out.println("Next Action: " + lastAction.b.copy().toString());
 
         return lastAction.b.copy();
     }
