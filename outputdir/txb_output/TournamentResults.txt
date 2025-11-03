@@ -188,3 +188,16 @@ rheaT2: Win rate 0.16 +/- 0.017	Mean Ordinal 2.90 +/- 0.06
 BasicMCTS: Win rate 0.06 +/- 0.011	Mean Ordinal 3.54 +/- 0.05
 rmhc: Win rate 0.02 +/- 0.007	Mean Ordinal 4.27 +/- 0.05
 
+Game: SushiGo, Players: 2, Mode: EXHAUSTIVE, TotalGames: 100, GamesPerMatchup: 50
+rheaT got 52,50 points. rheaT won 51,0% of the 100 games of the tournament. rheaT won 51,0% of the 100 games it played during the tournament.
+rheaT got a mean score of 50,99.
+rheaT won 51,0% of the 100 games against rheaT2.
+
+rheaT2 got 47,50 points. rheaT2 won 46,0% of the 100 games of the tournament. rheaT2 won 46,0% of the 100 games it played during the tournament.
+rheaT2 got a mean score of 51,31.
+rheaT2 won 46,0% of the 100 games against rheaT.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation) 
+rheaT: Win rate 0,53 +/- 0,049	Mean Ordinal 1,46 +/- 0,05
+rheaT2: Win rate 0,48 +/- 0,049	Mean Ordinal 1,51 +/- 0,05
+

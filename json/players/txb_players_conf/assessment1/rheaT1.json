@@ -2,10 +2,10 @@
   "class": "players.GroupT.RHEAParamsT",
   "horizon": 10,
   "discountFactor": 0.9,
-  "populationSize": 15,
+  "populationSize": 10,
   "childCount": 10,
   "crossoverType": "UNIFORM",
-  "eliteCount": 1,
+  "eliteCount": 3,
   "selectionType": "TRUNCATION_TOURNAMENT",
   "tournamentSize": 5,
   "truncationRatio": 0.3,
@@ -14,6 +14,6 @@
   "breakMS": 0,
   "shiftLeft": true,
   "heuristic" : {
-    "class" : "players.heuristics.SGHeuristic"
+    "class" : "players.heuristics.SGHeuristic_XT"
   }
 }

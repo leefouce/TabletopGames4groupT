@@ -2,7 +2,7 @@
   "class": "players.GroupT.RHEAParamsT",
   "horizon": 10,
   "discountFactor": 0.9,
-  "populationSize": 15,
+  "populationSize": 10,
   "childCount": 10,
   "crossoverType": "UNIFORM",
   "eliteCount": 1,
