@@ -102,3 +102,37 @@ rheaT2 won 98.0% of the 100 games against mcts.
 rheaT2: Win rate 0.98 +/- 0.014	Mean Ordinal 1.02 +/- 0.01
 mcts: Win rate 0.02 +/- 0.014	Mean Ordinal 1.98 +/- 0.01
 
+Game: SushiGo, Players: 2, Mode: EXHAUSTIVE, TotalGames: 100, GamesPerMatchup: 50
+mcts got 4,00 points. mcts won 4,0% of the 100 games of the tournament. mcts won 4,0% of the 100 games it played during the tournament.
+mcts got a mean score of 39,29.
+mcts won 4,0% of the 100 games against rheaT2.
+
+rheaT2 got 96,00 points. rheaT2 won 96,0% of the 100 games of the tournament. rheaT2 won 96,0% of the 100 games it played during the tournament.
+rheaT2 got a mean score of 61,19.
+rheaT2 won 96,0% of the 100 games against mcts.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation) 
+rheaT2: Win rate 0,96 +/- 0,020	Mean Ordinal 1,04 +/- 0,02
+mcts: Win rate 0,04 +/- 0,020	Mean Ordinal 1,96 +/- 0,02
+
+Game: SushiGo, Players: 3, Mode: EXHAUSTIVE, TotalGames: 96, GamesPerMatchup: 16
+mcts got 5,00 points. mcts won 5,2% of the 96 games of the tournament. mcts won 5,2% of the 96 games it played during the tournament.
+mcts got a mean score of 30,67.
+mcts won 5,2% of the 96 games against rhea1.
+mcts won 5,2% of the 96 games against rheaT2.
+
+rhea1 got 48,00 points. rhea1 won 50,0% of the 96 games of the tournament. rhea1 won 50,0% of the 96 games it played during the tournament.
+rhea1 got a mean score of 43,99.
+rhea1 won 50,0% of the 96 games against mcts.
+rhea1 won 50,0% of the 96 games against rheaT2.
+
+rheaT2 got 43,00 points. rheaT2 won 44,8% of the 96 games of the tournament. rheaT2 won 44,8% of the 96 games it played during the tournament.
+rheaT2 got a mean score of 42,96.
+rheaT2 won 44,8% of the 96 games against mcts.
+rheaT2 won 44,8% of the 96 games against rhea1.
+
+---- Ranking ---- (+/- are standard errors on the mean calculated using a Normal approximation) 
+rhea1: Win rate 0,50 +/- 0,051	Mean Ordinal 1,56 +/- 0,06
+rheaT2: Win rate 0,45 +/- 0,051	Mean Ordinal 1,69 +/- 0,07
+mcts: Win rate 0,05 +/- 0,023	Mean Ordinal 2,75 +/- 0,06
+

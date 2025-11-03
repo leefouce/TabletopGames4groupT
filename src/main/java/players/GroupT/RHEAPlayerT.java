@@ -18,7 +18,7 @@ public class RHEAPlayerT extends AbstractPlayer implements IAnyTimePlayer {
 
     private static final AbstractPlayer randomPlayer = new RandomPlayer();
 
-    // MAST statistics – NOT final (we re‑assign after decay)
+    // MAST statistics – NOT final (we re-assign after decay)
     private List<Map<Object, Pair<Integer, Double>>> MASTStatistics;
     private List<RHEAIndividualT> population = new ArrayList<>();
     private final List<RHEAIndividualT> hallOfFame = new ArrayList<>(10);
@@ -77,25 +77,46 @@ public class RHEAPlayerT extends AbstractPlayer implements IAnyTimePlayer {
             mastPlayer.setMASTStats(MASTStatistics);
         }
 
-        /* -------------------- Shift‑left reuse -------------------- */
+        /* -------------------- Shift-left reuse -------------------- */
         if (p.shiftLeft && !population.isEmpty()) {
+            // We keep your budget checks, but null the last gene to maintain a constant horizon.
             population.forEach(i -> i.value = Double.NEGATIVE_INFINITY);
             for (RHEAIndividualT ind : population) {
                 if (!budgetLeft(timer)) break;
+
+                // shift actions left by 1, and free the tail gene to be repaired (effective shift buffer)
                 System.arraycopy(ind.actions, 1, ind.actions, 0, ind.actions.length - 1);
+                ind.actions[ind.actions.length - 1] = null;
+
                 ind.gameStates[0] = stateObs.copy();
                 Pair<Integer, Integer> calls = ind.rollout(getForwardModel(), 0, getPlayerID(), true);
                 fmCalls += calls.a; copyCalls += calls.b;
             }
         } else {
+            // Use the improved seeded initialisation from the Individual class
             population.clear();
-            for (int i = 0; i < p.populationSize; i++) {
-                if (!budgetLeft(timer)) break;
+            if (budgetLeft(timer)) {
+                List<RHEAIndividualT> seeded = RHEAIndividualT.initPopulation(
+                        p.populationSize, p.horizon, p.discountFactor,
+                        getForwardModel(), stateObs, getPlayerID(), rnd, p.heuristic,
+                        p.useMAST ? mastPlayer : randomPlayer
+                );
+                // Account for FM/copy calls similarly to your previous approximation
+                for (RHEAIndividualT ind : seeded) {
+                    if (!budgetLeft(timer)) break;
+                    population.add(ind);
+                    // Approximate accounting as before
+                    fmCalls += ind.length;
+                    copyCalls += ind.length;
+                }
+            }
+            // If budget was exhausted before adding any, fall back to at least one random
+            if (population.isEmpty()) {
                 population.add(new RHEAIndividualT(
                         p.horizon, p.discountFactor, getForwardModel(), stateObs,
                         getPlayerID(), rnd, p.heuristic,
                         p.useMAST ? mastPlayer : randomPlayer));
-                RHEAIndividualT ind = population.get(i);
+                RHEAIndividualT ind = population.get(0);
                 fmCalls += ind.length;
                 copyCalls += ind.length;
             }
@@ -147,7 +168,7 @@ public class RHEAPlayerT extends AbstractPlayer implements IAnyTimePlayer {
         int keep = Math.min(p.populationSize, offspring.size());
         population = new ArrayList<>(offspring.subList(0, keep));
 
-        // 4. Hall‑of‑Fame injection (every 3 generations)
+        // 4. Hall-of-Fame injection (every 3 generations)
         if (numIters % 3 == 0 && !hallOfFame.isEmpty() && population.size() < p.populationSize) {
             population.add(new RHEAIndividualT(hallOfFame.get(rnd.nextInt(Math.min(3, hallOfFame.size())))));
             population.sort(Comparator.naturalOrder());
@@ -162,7 +183,7 @@ public class RHEAPlayerT extends AbstractPlayer implements IAnyTimePlayer {
 
     /* --------------------------------------------------------------------- */
     private RHEAIndividualT mutate(RHEAIndividualT ind) {
-        RHEAParamsT p = getParameters();                     // <-- FIXED: local reference
+        RHEAParamsT p = getParameters();                     // local reference
         int mutations = Math.max(1, (int) (ind.length * mutationRate));
         Pair<Integer, Integer> calls = ind.mutate(getForwardModel(), getPlayerID(), mutations);
         fmCalls += calls.a; copyCalls += calls.b;
@@ -313,7 +334,7 @@ public class RHEAPlayerT extends AbstractPlayer implements IAnyTimePlayer {
 
     @Override public void setBudget(int budget) { parameters.budget = budget; parameters.setParameterValue("budget", budget); }
     @Override public int getBudget() { return parameters.budget; }
- 
+
     public double getBestValue() {
         if (population.isEmpty()) return 0.0;
         population.sort(Comparator.naturalOrder());
