@@ -2,7 +2,7 @@
   "class": "players.GroupT.RHEAParamsT",
   "horizon": 10,
   "discountFactor": 0.9,
-  "populationSize": 10,
+  "populationSize": 15,
   "childCount": 10,
   "crossoverType": "UNIFORM",
   "eliteCount": 1,
@@ -14,6 +14,6 @@
   "breakMS": 0,
   "shiftLeft": true,
   "heuristic" : {
-    "class" : "players.heuristics.SGHeuristic"
+    "class" : "players.heuristics.ScoreHeuristic"
   }
 }

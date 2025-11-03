@@ -119,8 +119,15 @@ public class RHEAPlayerT extends AbstractPlayer implements IAnyTimePlayer {
 
         /* -------------------- Return best action -------------------- */
         AbstractAction ret = best.actions[0];
-        if (!getForwardModel().computeAvailableActions(stateObs).contains(ret))
+        for (int i = 0; i < best.actions.length; i++) {
+            if (getForwardModel().computeAvailableActions(stateObs).contains(best.actions[i])) {
+                ret = best.actions[i];
+                break;
+            }
+        }
+        if (!getForwardModel().computeAvailableActions(stateObs).contains(ret)) {
             throw new AssertionError("Chosen action not legal");
+        }
         return ret;
     }
 
