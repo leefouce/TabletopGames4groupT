@@ -10,7 +10,7 @@
   "tournamentSize": 5,
   "truncationRatio": 0.3,
   "budgetType": "BUDGET_TIME",
-  "budget": 100,
+  "budget": 200,
   "breakMS": 0,
   "shiftLeft": true,
   "heuristic" : {
