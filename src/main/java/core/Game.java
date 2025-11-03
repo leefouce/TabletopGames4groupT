@@ -450,7 +450,7 @@ public class Game {
 
                 agentTime = (System.nanoTime() - s);
 //                if (this.players.get(gameState.getCurrentPlayer()).name.equals("rheaT"))
-                    System.out.printf("player: %s | agentTime in ms = %.2f %n",this.players.get(gameState.getCurrentPlayer()).name ,agentTime / 1e6);
+//                    System.out.printf("player: %s | agentTime in ms = %.2f %n",this.players.get(gameState.getCurrentPlayer()).name ,agentTime / 1e6);
 //                    System.out.printf("player: rheaT | agentTime in ms = %.2f %n", agentTime / 1e6);
                 nDecisions++;
             }
